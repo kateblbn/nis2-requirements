@@ -1,0 +1,29 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  padding: 0;
+}
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* font-family: 'TelenorEvolutionUI-Normal' ; */
+  font-weight: 400;
+  width: 100%;
+  color: #213547;
+  background-color: #ffffff;
+  font-size: 1vw;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+
+@font-face {
+  font-family: 'TelenorEvolutionUI-Normal' ;
+  src: url(../public/fonts/TelenorEvolutionUI-Normal.ttf);
+}

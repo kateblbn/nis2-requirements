@@ -1,0 +1,202 @@
+hr {
+  width: 100%;
+}
+hr .line {
+  width: 90%;
+}
+h2 {
+  text-align: center;
+}
+
+/*  progress bar! */
+.progress-bar-container {
+  display: inline-block;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #000;
+  padding: 12px 8px 12px 4px;
+  border-radius: 8px;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  --border-width: 3px;
+  --circle-diameter: 50px;
+  --pipe-height: 15px;
+  --score-0-color: #57caff;
+  --score-1-color: #007bff;
+  --score-2-color: #0062cc;
+  --score-3-color: #004a99;
+  --score-4-color: #003166;
+  --score-5-color: #001933;
+  --unachieved-color: #777;
+}
+
+.maturity-names {
+  margin-left: -4px;
+}
+
+.maturity-names p {
+  font-size: 16px;
+  font-weight: 200;
+  color: white;
+  margin-left: 52px;
+  display: inline;
+}
+
+.progress-bar {
+  padding-top: 4px;
+  background-color: #000;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.line {
+  width: 70px;
+  height: var(--pipe-height);
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  z-index: 777;
+  margin: 0 -4px;
+  border-bottom: var(--border-width) solid white;
+  border-top: var(--border-width) solid white;
+}
+
+.circle {
+  position: relative;
+  width: var(--circle-diameter);
+  height: var(--circle-diameter);
+  vertical-align: middle;
+  display: inline-block;
+  border-radius: 50%;
+  border: var(--border-width) solid white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.circle .number {
+  font-size: 14px;
+  color: white;
+  /* position: absolute; */
+  /* display: inline; */
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.ant-table-title {
+  padding: 4px 4px !important;
+}
+h3 {
+  margin: 0 0 4px 0 !important;
+  text-align: left;
+}
+.step-not-started {
+  background-color: var(--unachieved-color);
+}
+.ant-pagination {
+  margin: 5px 0 !important;
+}
+.ant-table-row {
+  width: 100% !important;
+}
+.ant-table-row:nth-child(even) {
+  background-color: #f1f1f1;
+}
+.ant-modal {
+  padding: 20px;
+}
+.ant-table-thead {
+  display: none;
+}
+.ant-table-cell {
+  /* width: 21% !important; */
+  width: 7rem !important;
+}
+.circle-score-1 {
+  background-color: var(--score-1-color);
+}
+.circle-score-2 {
+  background-color: var(--score-2-color);
+}
+.circle-score-3 {
+  background-color: var(--score-3-color);
+}
+.circle-score-4 {
+  background-color: var(--score-4-color);
+}
+.circle-score-5 {
+  background-color: var(--score-5-color);
+}
+
+.line-1 {
+  background: linear-gradient(
+    to right,
+    var(--score-0-color),
+    var(--score-1-color)
+  );
+}
+.line-2 {
+  background: linear-gradient(
+    to right,
+    var(--score-1-color),
+    var(--score-2-color)
+  );
+}
+.line-3 {
+  background: linear-gradient(
+    to right,
+    var(--score-2-color),
+    var(--score-3-color)
+  );
+}
+.line-4 {
+  background: linear-gradient(
+    to right,
+    var(--score-3-color),
+    var(--score-4-color)
+  );
+}
+.line-5 {
+  background: linear-gradient(
+    to right,
+    var(--score-4-color),
+    var(--score-5-color)
+  );
+}
+.line-0-5 {
+  background: linear-gradient(
+    to right,
+    var(--score-0-color) 50%,
+    var(--unachieved-color) 0%
+  );
+}
+.line-1-5 {
+  background: linear-gradient(
+    to right,
+    var(--score-1-color) 50%,
+    var(--unachieved-color) 0%
+  );
+}
+.line-2-5 {
+  background: linear-gradient(
+    to right,
+    var(--score-2-color) 50%,
+    var(--unachieved-color) 0%
+  );
+}
+.line-3-5 {
+  background: linear-gradient(
+    to right,
+    var(--score-3-color) 50%,
+    var(--unachieved-color) 0%
+  );
+}
+.line-4-5 {
+  background: linear-gradient(
+    to right,
+    var(--score-4-color) 50%,
+    var(--unachieved-color) 0%
+  );
+}
