@@ -1,0 +1,39 @@
+#root {
+  text-align: center;
+  --main-blue-color: #118dff;
+
+  width: 100vw;
+  height: calc(100vh - 181px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+.wrapper {
+  height: 100%;
+}
+.ant-tooltip-inner {
+  color: black !important;
+}
+
+button {
+  font-size: 14px;
+  height: 32px;
+ border-radius: 10%;
+}
+@media (min-width: 3000px) {
+  #root {
+    width: 3000px;
+  }
+}
+
+@media (min-width: 2300px) {
+  #root {
+    font-size: 21px;
+  }
+}
+
+@media (max-width: 1200px) {
+  #root {
+    width: 1200px;
+  }
+}

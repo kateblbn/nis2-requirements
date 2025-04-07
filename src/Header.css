@@ -1,0 +1,36 @@
+.Header {
+  align-items: center;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  height: 100px;
+  background-color: #00108a;
+
+  box-sizing: border-box;
+  padding: 2% 5%;
+
+  #telenorLogo {
+    width: 4rem;
+    height: 4rem;
+    margin-right: 25px;
+  }
+
+  .title {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    color: #fff;
+    font-size: 1.3rem;
+
+    h1 {
+      font-family: "Segoe UI", sans-serif;
+      color: #fff;
+    }
+
+    h2 {
+      display: inline;
+      font-family: "DIN", sans-serif;
+      text-align: left;
+    }
+  }
+}
