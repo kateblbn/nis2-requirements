@@ -1,8 +1,8 @@
 import ArticlesView from "./ArticlesView";
 import MainHeaderInMatrix from "../MainHeaderInMatrix";
-import { Nis2Model } from "../Data";
+import { Nis2Model } from "../maturity-model/Data";
 import { useState } from "react";
-import './Nis2ViewMatrix.css'
+import "./Nis2ViewMatrix.css";
 
 type Nis2ViewMatrixProps = {
   nis2model: Nis2Model[] | undefined;
@@ -26,9 +26,9 @@ export default function Nis2ViewMatrix({ nis2model }: Nis2ViewMatrixProps) {
     <>
       <MainHeaderInMatrix title="NIS2 Directive Chapter IV: CyberSecurity Rist-Management Measures And Reporting Obligations" />
       <div className="nis2-matrix-container">
-      {groupedArticles &&
-        Object.keys(groupedArticles).map((article) => {
-          return (
+        {groupedArticles &&
+          Object.keys(groupedArticles).map((article) => {
+            return (
               <ArticlesView
                 isActive={activeArticle === article}
                 key={article}
@@ -37,7 +37,7 @@ export default function Nis2ViewMatrix({ nis2model }: Nis2ViewMatrixProps) {
               />
             );
           })}
-          </div>
+      </div>
     </>
   );
 }

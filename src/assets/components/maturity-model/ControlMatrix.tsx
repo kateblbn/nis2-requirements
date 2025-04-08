@@ -2,7 +2,7 @@ import ChapterItem from "./ChapterItem";
 import { SepModel, ChapterData } from "./Data";
 import "./ControlMatrix.css";
 import ControlItem from "./ControlItem";
-import MainHeaderInMatrix from "./MainHeaderInMatrix";
+import MainHeaderInMatrix from "../MainHeaderInMatrix";
 
 interface ControlMatrixProps {
   chapters: ChapterData[];

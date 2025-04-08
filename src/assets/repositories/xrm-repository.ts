@@ -7,9 +7,9 @@ import {
   NistControlApiModel,
   SepModel,
   TaGroupAndCategory,
-} from "../components/Data";
+} from "../components/maturity-model/Data";
 import { IRepository } from "./repository-interface";
-import { mapNestedKeys } from "../components/Data";
+import { mapNestedKeys } from "../components/maturity-model/Data";
 
 export default class XrmRepository implements IRepository {
   private webApi: Xrm.WebApi;

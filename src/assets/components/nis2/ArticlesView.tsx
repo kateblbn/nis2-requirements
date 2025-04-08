@@ -1,5 +1,5 @@
 import { Button } from "antd/es/radio";
-import { Nis2Model } from "../Data";
+import { Nis2Model } from "../maturity-model/Data";
 import "./ArticlesView.css";
 
 type ArticlesViewProps = {

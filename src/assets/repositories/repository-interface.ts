@@ -6,7 +6,7 @@ import {
   NistControlApiModel,
   SepModel,
   TaGroupAndCategory,
-} from "../components/Data";
+} from "../components/maturity-model/Data";
 
 export interface IRepository {
   getMaturityModel(): Promise<SepModel[]>;
@@ -29,4 +29,3 @@ export interface IRepository {
 export interface IRepository {
   getNis2Requirements(): Promise<Nis2Model[]>;
 }
-

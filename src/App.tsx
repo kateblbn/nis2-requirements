@@ -7,15 +7,15 @@ import {
   Nis2Model,
   SepModel,
   TaGroupAndCategory,
-} from "./assets/components/Data";
-import ControlMatrix from "./assets/components/ControlMatrix";
-import Header from "./assets/components/Header";
-import { getUniqueBus } from "./assets/components/FilteringByData";
-import ModalData from "./assets/components/popup/ModalData";
+} from "./assets/components/maturity-model/Data";
+import ControlMatrix from "./assets/components/maturity-model/ControlMatrix";
+import Header from "./assets/components/maturity-model/Header";
+import FilterBar from "./assets/components/maturity-model/FilterBu";
+import { getUniqueBus } from "./assets/components/maturity-model/FilteringByData";
+import ModalData from "./assets/components/maturity-model/popup/ModalData";
 import { FilteredDataByPeriodYear, FinalDataGroupedByChapters } from "./utils";
 import { Button } from "antd";
 import Nis2ViewMatrix from "./assets/components/nis2/Nis2ViewMatrix";
-import FilterBar from './assets/components/FilterBu';
 
 function App() {
   const [maturityModelData, setMaturityModelData] = useState<SepModel[]>();

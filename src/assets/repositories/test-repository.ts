@@ -8,7 +8,7 @@ import {
   NistControlApiModel,
   SepModel,
   TaGroupAndCategory,
-} from "../components/Data";
+} from "../components/maturity-model/Data";
 import { IRepository } from "./repository-interface";
 
 export class TestRepository implements IRepository {

@@ -9,7 +9,7 @@ import {
   SepModel,
 } from "../Data";
 import "./ModalData.css";
-import { IRepository } from "../../repositories/repository-interface";
+import { IRepository } from "../../../repositories/repository-interface";
 import Termometer from "./Termometer";
 import ModalIsoData from "./ModalIsoData";
 import ModalNistData from "./ModalNistData";
@@ -98,7 +98,7 @@ export default function ModalData({
       loading={isLoading}
     >
       <div>
-        <hr style={{ width: "90%" }}  />
+        <hr style={{ width: "90%" }} />
         <h2>{title}</h2>
         <hr style={{ width: "90%" }} />
       </div>

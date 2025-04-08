@@ -1,4 +1,4 @@
-import "./FilterBar.css";
+import "./FilterBu.css";
 import { Select } from "antd";
 type FilterBarProps = {
   buOptions: string[];
