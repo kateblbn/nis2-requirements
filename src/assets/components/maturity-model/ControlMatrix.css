@@ -87,13 +87,13 @@
 @media (min-width: 2316px) {
   .header-techniques-wrapper {
     /* height: 125px; */
-    font-size: 18px !important;
+    font-size: 22px !important;
   }
 }
 
 @media (min-width: 2300px) {
   * {
-    font-size: 18px !important;
+    font-size: 22px !important;
   }
 }
 

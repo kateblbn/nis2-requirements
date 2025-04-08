@@ -1,7 +1,4 @@
-import {
-  SepModel,
-  TaGroupAndCategory,
-} from "./assets/components/maturity-model/Data";
+import { SepModel, TaGroupAndCategory } from "./assets/components/maturity-model/Data";
 import { ActorNames } from "./assets/components/maturity-model/FilterBu";
 
 export function FilteredDataByPeriodYear(

@@ -15,11 +15,6 @@
   color: black !important;
 }
 
-button {
-  font-size: 14px;
-  height: 32px;
- border-radius: 10%;
-}
 @media (min-width: 3000px) {
   #root {
     width: 3000px;
@@ -35,6 +30,10 @@ button {
 @media (max-width: 1200px) {
   #root {
     width: 1200px;
+  }
+  #root, p {
+    font-size: 15px;
+
   }
 }
 

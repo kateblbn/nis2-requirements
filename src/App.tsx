@@ -183,6 +183,7 @@ function App() {
           </Button>
         </div>
       </Header>
+      <div style={{width: '95%', margin: '0 auto', height: "100vh"}}>
       {switchControls === 2 && (
         <ControlMatrix
           chapters={chapters}
@@ -192,6 +193,8 @@ function App() {
       )}
       {switchControls === 3 && getSelectText()}
       {switchControls === 1 && <Nis2ViewMatrix nis2model={nis2Requirements} />}
+
+      </div>
       {modal}
     </>
   );
