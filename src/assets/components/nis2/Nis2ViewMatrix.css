@@ -1,0 +1,9 @@
+.nis2-matrix-container {
+    width: 95%;
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+padding-top: 15px;
+margin: 0 auto;
+
+}

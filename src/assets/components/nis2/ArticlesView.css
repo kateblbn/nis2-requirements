@@ -1,0 +1,30 @@
+.article-container {
+    width: 95%;
+    height: 50px;
+  .main-button {
+    height: 8rem ;
+    width: 15rem;
+    .wrapper {
+      .box {
+        .number {
+        }
+      }
+      .name {
+        line-height: 1.1;
+        margin: 0;
+      }
+    }
+  }
+  .description-wrapper {
+    position: absolute;
+    left: 0;
+    .description {
+    }
+  }
+}
+
+@media (max-width: 950px) {
+    .main-button {
+        width: 20rem;
+    }
+}

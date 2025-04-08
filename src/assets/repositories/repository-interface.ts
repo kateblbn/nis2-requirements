@@ -2,6 +2,7 @@ import {
   ChapterData,
   IsoControlApiModel,
   MitreEnterpriseApiModel,
+  Nis2Model,
   NistControlApiModel,
   SepModel,
   TaGroupAndCategory,
@@ -25,3 +26,7 @@ export interface IRepository {
 export interface IRepository {
   getMitreTechniques(maturityGuid: string): Promise<MitreEnterpriseApiModel[]>;
 }
+export interface IRepository {
+  getNis2Requirements(): Promise<Nis2Model[]>;
+}
+

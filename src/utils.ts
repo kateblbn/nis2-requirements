@@ -1,5 +1,5 @@
 import { SepModel, TaGroupAndCategory } from "./assets/components/Data";
-import { ActorNames } from "./assets/components/FilterBar";
+import { ActorNames } from "./assets/components/FilterBu";
 
 export function FilteredDataByPeriodYear(
   filteredData: SepModel[],
@@ -35,25 +35,26 @@ export function FinalDataGroupedByChapters(finalData: SepModel[]) {
   }, new Map<string, SepModel[]>());
 }
 
-export function getUniqActorMainNames(taGroupAndCategory: TaGroupAndCategory[], selectedCategories: string[] ) {
-  return taGroupAndCategory.reduce<ActorNames[]>(
-    (acc, current) => {
-      const existingActor = acc.find((item) => {
-        return item.mainName === current.taGroup.esa_name;
+export function getUniqActorMainNames(
+  taGroupAndCategory: TaGroupAndCategory[],
+  selectedCategories: string[]
+) {
+  return taGroupAndCategory.reduce<ActorNames[]>((acc, current) => {
+    const existingActor = acc.find((item) => {
+      return item.mainName === current.taGroup.esa_name;
+    });
+
+    if (existingActor) return acc;
+    if (
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(current.taCategory.esa_name)
+    ) {
+      acc.push({
+        mainName: current.taGroup.esa_name,
+        otherNames: current.taGroup.esa_othernames,
       });
-
-      if (existingActor) return acc;
-      if (selectedCategories.length === 0 ||
-        selectedCategories.includes(current.taCategory.esa_name)) {
-        acc.push({
-          mainName: current.taGroup.esa_name,
-          otherNames: current.taGroup.esa_othernames,
-        });
-      }
-      // console.log(acc);
-      return acc;
-    },
-    []
-  );
+    }
+    // console.log(acc);
+    return acc;
+  }, []);
 }
-

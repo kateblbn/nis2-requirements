@@ -1,0 +1,12 @@
+.header-matrix-container {
+width: 95%;
+margin: 0 auto;
+height: 70px;
+background-color: rgb(103, 150, 190);
+border-radius: 1rem;
+margin-top: 10px;
+text-align: center;
+h1 {
+    margin: 5px;
+}
+}

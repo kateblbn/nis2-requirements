@@ -4,35 +4,27 @@ import { TestRepository } from "./assets/repositories/test-repository";
 import XrmRepository from "./assets/repositories/xrm-repository";
 import {
   ChapterData,
+  Nis2Model,
   SepModel,
   TaGroupAndCategory,
 } from "./assets/components/Data";
 import ControlMatrix from "./assets/components/ControlMatrix";
 import Header from "./assets/components/Header";
-import FilterBar from "./assets/components/FilterBar";
-import {
-  getCleanActorNames,
-  getUniqueBus,
-  getUniqueCategories,
-  getUniqueYears,
-} from "./assets/components/FilteringByData";
+import { getUniqueBus } from "./assets/components/FilteringByData";
 import ModalData from "./assets/components/popup/ModalData";
-import {
-  FilteredDataByPeriodYear,
-  FinalDataGroupedByChapters,
-  getUniqActorMainNames,
-} from "./utils";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FilteredDataByPeriodYear, FinalDataGroupedByChapters } from "./utils";
 import { Button } from "antd";
+import Nis2ViewMatrix from "./assets/components/nis2/Nis2ViewMatrix";
+import FilterBar from './assets/components/FilterBu';
 
 function App() {
   const [maturityModelData, setMaturityModelData] = useState<SepModel[]>();
   const [chapters, setChapters] = useState<ChapterData[]>();
   const [taGroupAndCategory, setTaGroupAndCategory] =
     useState<TaGroupAndCategory[]>();
-  const [showMaturityModelView, setShowMaturityModelView] = useState(false);
-  const [showInfoTextFromClearButton, setshowInfoTextFromClearButton] =
-    useState(false);
+  const [nis2Requirements, setNis2Requirements] = useState<Nis2Model[]>();
+
+  const [switchControls, setSwitchControls] = useState<number>(1);
 
   const [selectedBu, setSelectedBu] = useState<string | undefined>(undefined);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -43,6 +35,7 @@ function App() {
   const [selectedSepModel, setSelectedSepModel] = useState<
     SepModel | undefined
   >();
+  console.log(nis2Requirements);
 
   let repo = import.meta.env.DEV
     ? new TestRepository()
@@ -69,15 +62,9 @@ function App() {
     });
     repo.getChapterData().then((x) => setChapters(x));
     repo.getActorGroupAndCategory().then((x) => setTaGroupAndCategory(x));
+    repo.getNis2Requirements().then((x) => setNis2Requirements(x));
   }, []);
 
-  const toggleMaturityModelButton = () => {
-    setShowMaturityModelView(!showMaturityModelView);
-  };
-
-  const toggleClearSelectionButton = () => {
-    setshowInfoTextFromClearButton(!showInfoTextFromClearButton);
-  };
   // console.log(selectedPeriod);
   if (
     !maturityModelData ||
@@ -162,11 +149,13 @@ function App() {
       );
     }
   }
-  console.log(selectedSepModel);
   const getSelectText = () => {
-    return <div>Select an article to expand the list of Telenor Maturity  model constrols</div>;
+    return (
+      <div>
+        Select an article to expand the list of Telenor Maturity model constrols
+      </div>
+    );
   };
-  console.log(getSelectText);
 
   //minimise app.tsx use with functions!
   return (
@@ -179,11 +168,11 @@ function App() {
           selectedBu={selectedBu}
         />
         <div>
-          <Button>NIS2 view</Button>
-          <Button onClick={() => toggleMaturityModelButton()}>
+          <Button onClick={() => setSwitchControls(1)}>NIS2 view</Button>
+          <Button onClick={() => setSwitchControls(2)}>
             Maturity Model view
           </Button>
-          <Button type="text" onClick={() => toggleClearSelectionButton()}>
+          <Button type="text" onClick={() => setSwitchControls(3)}>
             <svg
               style={{ width: "20px", fill: "white" }}
               xmlns="http://www.w3.org/2000/svg"
@@ -194,14 +183,15 @@ function App() {
           </Button>
         </div>
       </Header>
-      {showMaturityModelView && (
+      {switchControls === 2 && (
         <ControlMatrix
           chapters={chapters}
           modelWithControls={groupedByChapters}
           onMaturityClick={setSelectedSepModel}
         />
       )}
-      {showInfoTextFromClearButton && getSelectText()}
+      {switchControls === 3 && getSelectText()}
+      {switchControls === 1 && <Nis2ViewMatrix nis2model={nis2Requirements} />}
       {modal}
     </>
   );

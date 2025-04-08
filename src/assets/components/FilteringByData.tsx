@@ -1,5 +1,5 @@
 import { SepModel, TaGroupAndCategory } from "./Data";
-import { ActorNames } from "./FilterBar";
+import { ActorNames } from "./FilterBu";
 
 export function getUniqueCategories(
   actorCategoryData: TaGroupAndCategory[]

@@ -1,3 +1,11 @@
+export type Nis2Model = {
+  "@odata.etag": string;
+  esa_articlename: string;
+  esa_articlenumber: number;
+  esa_name: string;
+  esa_requirementid: string;
+};
+
 export type SepModel = {
   "@odata.etag": string;
   esa_sepid: string;

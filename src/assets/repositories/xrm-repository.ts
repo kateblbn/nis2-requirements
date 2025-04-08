@@ -3,6 +3,7 @@ import {
   IsoControlApiModel,
   IsoStandart,
   MitreEnterpriseApiModel,
+  Nis2Model,
   NistControlApiModel,
   SepModel,
   TaGroupAndCategory,
@@ -15,6 +16,24 @@ export default class XrmRepository implements IRepository {
 
   constructor(xrm: Xrm.XrmStatic) {
     this.webApi = xrm.WebApi;
+  }
+  async getNis2Requirements(): Promise<Nis2Model[]> {
+    const fetchXml: string = `
+    <fetch>
+    <entity name='esa_nis2requirement'>
+      <attribute name="esa_articlename" />
+      <attribute name="esa_articlenumber" />
+      <attribute name="esa_name" />
+      <attribute name="esa_requirementid" />
+    </entity>
+  </fetch>
+    `;
+    const res: Xrm.RetrieveMultipleResult =
+      await this.webApi.retrieveMultipleRecords(
+        "esa_nis2requirement",
+        `?fetchXml=${encodeURIComponent(fetchXml)}`
+      );
+    return res.entities.map((x) => mapNestedKeys(x));
   }
 
   async getMitreTechniques(
