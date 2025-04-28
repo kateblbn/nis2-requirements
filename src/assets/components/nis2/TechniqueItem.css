@@ -1,0 +1,58 @@
+.tecnique-wrapper {
+  display: flex;
+  width: 90%;
+  font-size: 0.8rem;
+  align-items: center;
+  background-color: rgb(223, 223, 223);
+  border-radius: 5px;
+  margin: 4px;
+  padding: 4px;
+  flex-direction: column;
+}
+.tecnique-wrapper:nth-child(odd) {
+  background-color: #f1f1f1;
+}
+.tecnique-wrapper:hover {
+  background-color: #c7dcf9;
+  transition: 0.7s;
+  cursor: pointer;
+}
+.subtechniques-name {
+  width: 100%;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 5px;
+}
+
+
+.subtechniques-id {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 auto;
+}
+
+.subtechniques-event {
+  color: white;
+}
+
+.yellow {
+  background-color: #d5b60a !important;
+}
+.orange {
+  background-color: #e9692c !important;
+}
+.red {
+  background-color: #e10000 !important;
+}
+
+.tooltip-fs {
+  font-size: 10px;
+  color: black;
+  transition: 1s;
+}
+.ant-tooltip-inner {
+  background-color: #f5f8fc !important;
+  color: black !important;
+}

@@ -4,7 +4,7 @@ import { TestRepository } from "./assets/repositories/test-repository";
 import XrmRepository from "./assets/repositories/xrm-repository";
 import {
   ChapterData,
-  Nis2Model,
+  Nis2Requirements,
   SepModel,
   TaGroupAndCategory,
 } from "./assets/components/maturity-model/Data";
@@ -16,13 +16,17 @@ import ModalData from "./assets/components/maturity-model/popup/ModalData";
 import { FilteredDataByPeriodYear, FinalDataGroupedByChapters } from "./utils";
 import { Button } from "antd";
 import Nis2ViewMatrix from "./assets/components/nis2/Nis2ViewMatrix";
+import { Nis2ToMmSepAndBu } from "./assets/components/maturity-model/Data";
 
 function App() {
   const [maturityModelData, setMaturityModelData] = useState<SepModel[]>();
   const [chapters, setChapters] = useState<ChapterData[]>();
   const [taGroupAndCategory, setTaGroupAndCategory] =
     useState<TaGroupAndCategory[]>();
-  const [nis2Requirements, setNis2Requirements] = useState<Nis2Model[]>();
+  const [nis2Requirements, setNis2Requirements] =
+    useState<Nis2Requirements[]>();
+  const [nis2ToSepMmTable, setNis2ToSepMmTable] =
+    useState<Nis2ToMmSepAndBu[]>();
 
   const [switchControls, setSwitchControls] = useState<number>(1);
 
@@ -35,7 +39,7 @@ function App() {
   const [selectedSepModel, setSelectedSepModel] = useState<
     SepModel | undefined
   >();
-  console.log(nis2Requirements);
+  console.log(selectedPeriod);
 
   let repo = import.meta.env.DEV
     ? new TestRepository()
@@ -60,12 +64,24 @@ function App() {
 
       setSelectedPeriod(getLatestYear(bus[0], groupedByBu));
     });
-    repo.getChapterData().then((x) => setChapters(x));
-    repo.getActorGroupAndCategory().then((x) => setTaGroupAndCategory(x));
-    repo.getNis2Requirements().then((x) => setNis2Requirements(x));
+    repo
+      .getChapterData()
+      .then((x) => setChapters(x))
+      .catch((err) => console.error(err));
+    repo
+      .getActorGroupAndCategory()
+      .then((x) => setTaGroupAndCategory(x))
+      .catch((err) => console.error(err));
+    repo
+      .getNis2Requirements()
+      .then((x) => setNis2Requirements(x))
+      .catch((err) => console.error(err));
+    repo
+      .getNis2ToSepMmTable()
+      .then((x) => setNis2ToSepMmTable(x))
+      .catch((err) => console.error(err));
   }, []);
 
-  // console.log(selectedPeriod);
   if (
     !maturityModelData ||
     !chapters ||
@@ -183,17 +199,19 @@ function App() {
           </Button>
         </div>
       </Header>
-      <div style={{width: '95%', margin: '0 auto', height: "100vh"}}>
-      {switchControls === 2 && (
-        <ControlMatrix
-          chapters={chapters}
-          modelWithControls={groupedByChapters}
-          onMaturityClick={setSelectedSepModel}
-        />
-      )}
-      {switchControls === 3 && getSelectText()}
-      {switchControls === 1 && <Nis2ViewMatrix nis2model={nis2Requirements} />}
+      <div style={{ width: "95%", margin: "0 auto", height: "100vh" }}>
+      {switchControls === 1 && (
+          <Nis2ViewMatrix nis2model={nis2Requirements} nis2ToSepMmTable={nis2ToSepMmTable} bu={selectedBu}/>
+        )}
 
+        {switchControls === 2 && (
+          <ControlMatrix
+            chapters={chapters}
+            modelWithControls={groupedByChapters}
+            onMaturityClick={setSelectedSepModel}
+          />
+        )}
+        {switchControls === 3 && getSelectText()}
       </div>
       {modal}
     </>

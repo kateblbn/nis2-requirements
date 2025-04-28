@@ -1,9 +1,29 @@
-export type Nis2Model = {
+export type Nis2ToMmSepAndBu = {
+  "@odata.etag": 'W/"12526594"';
+  esa_nis2toisoid: string;
+  _esa_nis2requirement_value: string;
+  bu: {
+    name: string;
+  };
+  mm: {
+    esa_controlname: string;
+    esa_controlid: string;
+    esa_chapter: string;
+  };
+  sep: {
+    esa_score: number;
+    esa_mmcontrol: string;
+    esa_date: string;
+  };
+};
+
+export type Nis2Requirements = {
   "@odata.etag": string;
   esa_articlename: string;
   esa_articlenumber: number;
   esa_name: string;
   esa_requirementid: string;
+  esa_nis2requirementid: string;
 };
 
 export type SepModel = {

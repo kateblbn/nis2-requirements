@@ -23,7 +23,7 @@ body {
 
 
 
-@font-face {
-  font-family: 'TelenorEvolutionUI-Normal' ;
-  src: url(../public/fonts/TelenorEvolutionUI-Normal.ttf);
+p {
+  padding: 0;
+  margin: 0;
 }

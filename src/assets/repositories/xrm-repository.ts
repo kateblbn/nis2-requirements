@@ -3,7 +3,8 @@ import {
   IsoControlApiModel,
   IsoStandart,
   MitreEnterpriseApiModel,
-  Nis2Model,
+  Nis2Requirements,
+  Nis2ToMmSepAndBu,
   NistControlApiModel,
   SepModel,
   TaGroupAndCategory,
@@ -11,22 +12,137 @@ import {
 import { IRepository } from "./repository-interface";
 import { mapNestedKeys } from "../components/maturity-model/Data";
 
+//name, chapter, id
+/*
+
+NIS2 => MM
+	<fetch>
+		<entity name='esa_nis2toiso'>
+			<link-entity name='esa_mmtoiso' from='esa_isocontrolid' to='esa_isocontrol' alias="iso"  intersect="true">
+				<link-entity name='esa_telenormaturitymodel' from='esa_telenormaturitymodelid' to='esa_mmcontrolid' alias="mm" >
+					<attribute name="esa_telenormaturitymodelid" />
+					<attribute name="esa_controlid" />
+					<attribute name="esa_chapter" />
+					<attribute name="esa_controlname" />
+				</link-entity>
+			</link-entity>
+		</entity>
+	</fetch>
+
+
+
+//sep
+NIS2 => SEP
+	// рабочий но не то что нужно.
+<fetch>
+	<entity name='esa_nis2toiso'>
+		<link-entity name='esa_mmtoiso' from='esa_isocontrolid' to='esa_isocontrol' alias="iso"  intersect="true">
+			<link-entity name='esa_telenormaturitymodel' from='esa_telenormaturitymodelid' to='esa_mmcontrolid' alias="mm" >
+				<link-entity name='esa_sep' from='esa_mmcontrol' to='esa_telenormaturitymodelid' alias="sep" >
+					<attribute name="esa_name" />
+					<attribute name="esa_date" />
+					<attribute name="esa_score" />
+					<attribute name="owningbusinessunit" />
+				</link-entity>
+			</link-entity>
+		</link-entity>
+	</entity>
+</fetch>
+
+//скорее всего. этот чем предыдущий/
+<fetch>
+	<entity name='esa_nis2toiso'>		
+		<link-entity name='esa_mmtoiso' from='esa_isocontrolid' to='esa_isocontrol' alias="iso"  intersect="true">
+			стянуть esa_mmcontrol имя здесь и в конце групировать по ид(esa_isocontrolid попробовать)
+      <attribute name="esa_mmcontrolid" />
+			<link-entity name='esa_sep' from='esa_mmcontrol' to='esa_mmcontrolid' alias="sep" >
+				<attribute name="esa_mmcontrol" />
+				<attribute name="esa_date" />
+				<attribute name="esa_score" />
+				добавить линк к бизнес юнит таблице
+			</link-entity>
+		</link-entity>
+	</entity>
+</fetch>
+
+
+
+
+
+
+
+
+
+
+<fetch>
+  <entity name='esa_nis2toiso'>
+    <link-entity name='esa_mmtoiso' from='esa_isocontrolid' to='esa_isocontrol' alias="iso">
+      <attribute name="esa_mmcontrolid" />
+      <link-entity name='esa_sep' from='esa_mmcontrol' to='esa_mmcontrolid' alias="sep" >
+        <attribute name="esa_mmcontrol" />
+        <attribute name="esa_date" />
+        <attribute name="esa_score" />
+      </link-entity>
+    </link-entity>
+  </entity>
+</fetch>
+​
+
+*/
+
+//link to SEP - sep has bu and score and date and show data by newst date only. merge with guid of Maturity model
+//or separete or onbe fetch. try
+
 export default class XrmRepository implements IRepository {
   private webApi: Xrm.WebApi;
 
   constructor(xrm: Xrm.XrmStatic) {
     this.webApi = xrm.WebApi;
   }
-  async getNis2Requirements(): Promise<Nis2Model[]> {
+  async getNis2ToSepMmTable(): Promise<Nis2ToMmSepAndBu[]> {
+    const fetchXml: string = `
+      <fetch>
+        <entity name='esa_nis2toiso'>
+          <attribute name="esa_nis2requirement" />
+          <link-entity name='esa_mmtoiso' from='esa_isocontrolid' to='esa_isocontrol' alias="iso"  intersect="true">
+            <link-entity name='esa_sep' from='esa_mmcontrol' to='esa_mmcontrolid' alias="sep" >
+              <attribute name="esa_name" />
+              <attribute name="esa_date" />
+              <attribute name="esa_score" />
+              <attribute name="esa_mmcontrol" />
+              <link-entity name='esa_telenormaturitymodel' from='esa_telenormaturitymodelid' to='esa_mmcontrol' alias="mm" >
+                <attribute name="esa_controlname" />
+                <attribute name="esa_controlid" />
+                <attribute name="esa_chapter" />
+              </link-entity>
+              <link-entity name='businessunit' from='businessunitid' to='owningbusinessunit' alias='bu'>
+                <attribute name="name" />
+              </link-entity>
+            </link-entity>
+          </link-entity>
+        </entity>
+      </fetch>
+      `;
+    const res: Xrm.RetrieveMultipleResult =
+      await this.webApi.retrieveMultipleRecords(
+        "esa_nis2toiso",
+        `?fetchXml=${encodeURIComponent(fetchXml)}`
+      );
+
+    return res.entities.map((x) => mapNestedKeys(x));
+  }
+
+  async getNis2Requirements(): Promise<Nis2Requirements[]> {
     const fetchXml: string = `
     <fetch>
-    <entity name='esa_nis2requirement'>
-      <attribute name="esa_articlename" />
-      <attribute name="esa_articlenumber" />
-      <attribute name="esa_name" />
-      <attribute name="esa_requirementid" />
-    </entity>
-  </fetch>
+      <entity name='esa_nis2requirement'>
+        <attribute name="esa_articlename" />
+        <attribute name="esa_articlenumber" />
+        <attribute name="esa_name" />
+        <attribute name="esa_requirementid" />
+        <attribute name="esa_nis2requirementid" />
+      </entity>
+    </fetch>
     `;
     const res: Xrm.RetrieveMultipleResult =
       await this.webApi.retrieveMultipleRecords(
