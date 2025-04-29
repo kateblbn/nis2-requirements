@@ -16,6 +16,8 @@
   background-color: #c7dcf9;
   transition: 0.7s;
   cursor: pointer;
+  position: static;
+  height: 5rem;
 }
 .subtechniques-name {
   width: 100%;
@@ -31,10 +33,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0 auto;
+  left: 0;
 }
 
 .subtechniques-event {
   color: white;
+  justify-content: end;
 }
 
 .yellow {

@@ -26,7 +26,6 @@ export const TechniqueItem = ({
   return (
     <>
       <div className="tecnique-wrapper" onClick={(e) => onClick(id)}>
-        <div className="subtechniques-id">{id}</div>
         <Tooltip
           title={
             <div className="tooltip-fs ">
@@ -37,6 +36,7 @@ export const TechniqueItem = ({
         >
           <div className="subtechniques-name">{name}</div>
         </Tooltip>
+          <div className="subtechniques-id">{id}</div>
 
         <span className={colors}>{count}</span>
       </div>

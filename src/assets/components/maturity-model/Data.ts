@@ -13,7 +13,7 @@ export type Nis2ToMmSepAndBu = {
   sep: {
     esa_score: number;
     esa_mmcontrol: string;
-    esa_date: string;
+    esa_date: Date;
   };
 };
 
@@ -115,7 +115,7 @@ export function mapNestedKeys<T extends Record<string, any>>(
     const lastKey = parts[parts.length - 1];
 
     // If the corresponding type in typeRef is Date, convert value to Date
-    if (dateKeys && dateKeys.includes(key)) {
+    if (dateKeys && dateKeys.includes(lastKey)) {
       current[lastKey] = new Date(value);
     } else {
       current[lastKey] = value;

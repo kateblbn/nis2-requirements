@@ -14,7 +14,7 @@ import { IRepository } from "./repository-interface";
 
 export class TestRepository implements IRepository {
   async getNis2ToSepMmTable(): Promise<Nis2ToMmSepAndBu[]> {
-    return nis2ToMmSepAndBu.map((x) => mapNestedKeys(x));
+    return nis2ToMmSepAndBu.map((x) => mapNestedKeys(x, ["esa_date"])) as Nis2ToMmSepAndBu[];
   }
   async getNis2Requirements(): Promise<Nis2Requirements[]> {
     return nis2Requirements.map((x) => mapNestedKeys(x));

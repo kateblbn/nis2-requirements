@@ -14,9 +14,11 @@ import FilterBar from "./assets/components/maturity-model/FilterBu";
 import { getUniqueBus } from "./assets/components/maturity-model/FilteringByData";
 import ModalData from "./assets/components/maturity-model/popup/ModalData";
 import { FilteredDataByPeriodYear, FinalDataGroupedByChapters } from "./utils";
-import { Button } from "antd";
+import { Button, Switch } from "antd";
 import Nis2ViewMatrix from "./assets/components/nis2/Nis2ViewMatrix";
 import { Nis2ToMmSepAndBu } from "./assets/components/maturity-model/Data";
+import TrendingBaselineToggle from "./assets/components/nis2/TrendingBaselineToggle";
+import styles from "./index.css";
 
 function App() {
   const [maturityModelData, setMaturityModelData] = useState<SepModel[]>();
@@ -28,8 +30,8 @@ function App() {
   const [nis2ToSepMmTable, setNis2ToSepMmTable] =
     useState<Nis2ToMmSepAndBu[]>();
 
-  const [switchControls, setSwitchControls] = useState<number>(1);
-
+  const [switchControls, setSwitchControls] = useState<1 | 2 | 3>(1);
+  const [isTrendingView, setIsTrendingView] = useState(true);
   const [selectedBu, setSelectedBu] = useState<string | undefined>(undefined);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedActors, setSelectedActors] = useState<string[]>([]);
@@ -39,7 +41,11 @@ function App() {
   const [selectedSepModel, setSelectedSepModel] = useState<
     SepModel | undefined
   >();
-  console.log(selectedPeriod);
+
+  const onViewToggle = (checked: boolean) => {
+    setSwitchControls(checked ? 1 : 2);
+  };
+
 
   let repo = import.meta.env.DEV
     ? new TestRepository()
@@ -96,8 +102,34 @@ function App() {
     return item.bu.name;
   });
 
+  const groupedByBuNis2 = Map.groupBy(nis2ToSepMmTable!, (item) => {
+    return item.bu.name;
+  });
+
+  console.log(groupedByBuNis2);
+
   //filtering data by Period
-  const filteredData = groupedByBu.get(selectedBu) ?? [];
+  let filteredData = groupedByBu.get(selectedBu) ?? [];
+
+  console.log(filteredData);
+
+  let filteredDataNis2 = groupedByBuNis2.get(selectedBu) ?? [];
+  console.log(filteredDataNis2);
+
+  //get max year in data in filteredData
+  const years = filteredData.map((x) => x.esa_date.getFullYear());
+  const maxYear = Math.max(...years);
+
+  // filter by max year
+  filteredData = filteredData.filter(
+    (x) => x.esa_date.getFullYear() === maxYear
+  );
+
+  filteredDataNis2 = filteredDataNis2.filter(
+    (x) => x.sep.esa_date.getFullYear() === maxYear
+  );
+  console.log(filteredDataNis2);
+
   // console.log(filteredByPeriod);
   const filteredByPeriod = FilteredDataByPeriodYear(
     filteredData,
@@ -153,6 +185,7 @@ function App() {
 
   //SEP esa sepID!!!!
   //modal popup
+
   let modal = null;
   if (selectedSepModel) {
     if (finalData) {
@@ -173,6 +206,8 @@ function App() {
     );
   };
 
+  console.log(filteredDataNis2);
+
   //minimise app.tsx use with functions!
   return (
     <>
@@ -183,12 +218,21 @@ function App() {
           onBuChange={handleBuChange}
           selectedBu={selectedBu}
         />
-        <div>
-          <Button onClick={() => setSwitchControls(1)}>NIS2 view</Button>
+        <div className="toggle-wrapper">
+          <div>Maturity Model</div>
+          <Switch
+            className="main-switch"
+            checked={switchControls === 1}
+
+            onChange={onViewToggle}
+          />
+          <div>NIS2</div>
+
+          {/* <Button onClick={() => setSwitchControls(1)}>NIS2 view</Button>
           <Button onClick={() => setSwitchControls(2)}>
             Maturity Model view
-          </Button>
-          <Button type="text" onClick={() => setSwitchControls(3)}>
+          </Button> */}
+          <Button type="text" onClick={() => setSwitchControls(1)}>
             <svg
               style={{ width: "20px", fill: "white" }}
               xmlns="http://www.w3.org/2000/svg"
@@ -200,10 +244,12 @@ function App() {
         </div>
       </Header>
       <div style={{ width: "95%", margin: "0 auto", height: "100vh" }}>
-      {switchControls === 1 && (
-          <Nis2ViewMatrix nis2model={nis2Requirements} nis2ToSepMmTable={nis2ToSepMmTable} bu={selectedBu}/>
+        {switchControls === 1 && (
+          <Nis2ViewMatrix
+            nis2model={nis2Requirements}
+            nis2ToSepMmTable={filteredDataNis2}
+          />
         )}
-
         {switchControls === 2 && (
           <ControlMatrix
             chapters={chapters}
@@ -211,7 +257,6 @@ function App() {
             onMaturityClick={setSelectedSepModel}
           />
         )}
-        {switchControls === 3 && getSelectText()}
       </div>
       {modal}
     </>

@@ -6,12 +6,10 @@ import "./Nis2ViewMatrix.css";
 import SelectPage from "./SelectPage";
 
 type Nis2ViewMatrixProps = {
-  bu: string;
   nis2model: Nis2Requirements[] | undefined;
   nis2ToSepMmTable: Nis2ToMmSepAndBu[] | undefined;
 };
 export default function Nis2ViewMatrix({
-  bu,
   nis2model,
   nis2ToSepMmTable,
 }: Nis2ViewMatrixProps) {
@@ -64,18 +62,17 @@ export default function Nis2ViewMatrix({
             );
             console.log(mmEntries);
 
-            // const sortedByInstances = mmEntries.sort((a, b) => {
-            //   const [, aOccurences] = a;
-            //   const [, bOccurences] = b;
-            //   return bOccurences.length - aOccurences.length;
-            // });
-            console.log(activeArticle);
+            const sortedByInstances = mmEntries.sort((a, b) => {
+              const [, aOccurences] = a;
+              const [, bOccurences] = b;
+              return bOccurences.length - aOccurences.length;
+            });
+            console.log(articles[0].esa_nis2requirementid);
             return (
               <div key={article}>
                 <ArticlesView
-                  bu={bu}
                   id={articles[0].esa_nis2requirementid}
-                  nis2ToSepMmTable={mmEntries}
+                  nis2ToSepMmTable={sortedByInstances}
                   isActive={activeArticle === article}
                   articles={groupedArticles[article]}
                   onClick={() => handleActiveArticle(article)}

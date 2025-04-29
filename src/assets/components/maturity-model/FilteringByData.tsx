@@ -1,5 +1,4 @@
 import { SepModel, TaGroupAndCategory } from "./Data";
-import { ActorNames } from "./FilterBu";
 
 export function getUniqueCategories(
   actorCategoryData: TaGroupAndCategory[]
@@ -25,12 +24,6 @@ export function getUniqueYears(maturityData: SepModel[]) {
 
 //unique Actors
 
-export function getCleanActorNames(actorNames: ActorNames[]): ActorNames[] {
-  return actorNames.sort().map((x) => {
-    const otherNames = x.otherNames?.replace(/\s?\(.*?\)/g, " ") ?? "";
-    return { mainName: x.mainName, otherNames: otherNames };
-  });
-}
 
 export function getUniqueBus(maturityData: SepModel[]): string[] {
   return maturityData.reduce((acc: string[], e) => {

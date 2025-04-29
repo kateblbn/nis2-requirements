@@ -1,0 +1,10 @@
+.trending-baseline-toggle {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 0.5rem;
+    color: white  ;
+    padding: 0.2rem 1rem;
+    border-radius: 1rem;
+  }
+
