@@ -6,7 +6,6 @@ import {
   ChapterData,
   Nis2Requirements,
   SepModel,
-  TaGroupAndCategory,
 } from "./assets/components/maturity-model/Data";
 import ControlMatrix from "./assets/components/maturity-model/ControlMatrix";
 import Header from "./assets/components/maturity-model/Header";
@@ -14,38 +13,25 @@ import FilterBar from "./assets/components/maturity-model/FilterBu";
 import { getUniqueBus } from "./assets/components/maturity-model/FilteringByData";
 import ModalData from "./assets/components/maturity-model/popup/ModalData";
 import { FilteredDataByPeriodYear, FinalDataGroupedByChapters } from "./utils";
-import { Button, Switch } from "antd";
+import { Button, Spin, Switch } from "antd";
 import Nis2ViewMatrix from "./assets/components/nis2/Nis2ViewMatrix";
 import { Nis2ToMmSepAndBu } from "./assets/components/maturity-model/Data";
-import TrendingBaselineToggle from "./assets/components/nis2/TrendingBaselineToggle";
-import styles from "./index.css";
 
 function App() {
-  const [maturityModelData, setMaturityModelData] = useState<SepModel[]>();
-  const [chapters, setChapters] = useState<ChapterData[]>();
-  const [taGroupAndCategory, setTaGroupAndCategory] =
-    useState<TaGroupAndCategory[]>();
+  const [maturityScores, setMaturityScores] = useState<SepModel[]>();
+  const [mmChapters, setMmChapters] = useState<ChapterData[]>();
   const [nis2Requirements, setNis2Requirements] =
     useState<Nis2Requirements[]>();
-  const [nis2ToSepMmTable, setNis2ToSepMmTable] =
-    useState<Nis2ToMmSepAndBu[]>();
-
-  const [switchControls, setSwitchControls] = useState<1 | 2 | 3>(1);
-  const [isTrendingView, setIsTrendingView] = useState(true);
+  const [nis2ToSepTable, setNis2ToSepTable] = useState<Nis2ToMmSepAndBu[]>();
+  const [selectedView, setSelectedView] = useState<"Nis2" | "MM">("Nis2");
   const [selectedBu, setSelectedBu] = useState<string | undefined>(undefined);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedActors, setSelectedActors] = useState<string[]>([]);
-  const [selectedPeriod, setSelectedPeriod] = useState<number | undefined>(
-    undefined
-  );
   const [selectedSepModel, setSelectedSepModel] = useState<
     SepModel | undefined
   >();
 
   const onViewToggle = (checked: boolean) => {
-    setSwitchControls(checked ? 1 : 2);
+    setSelectedView(checked ? "Nis2" : "MM");
   };
-
 
   let repo = import.meta.env.DEV
     ? new TestRepository()
@@ -53,7 +39,7 @@ function App() {
 
   useEffect(() => {
     repo.getMaturityModel().then((x) => {
-      setMaturityModelData(x);
+      setMaturityScores(x);
       const groupedByBu = Map.groupBy(x, (item) => {
         return item.bu.name;
       });
@@ -67,120 +53,69 @@ function App() {
       } else {
         setSelectedBu(bus[0]); //change later!!
       }
-
-      setSelectedPeriod(getLatestYear(bus[0], groupedByBu));
     });
     repo
       .getChapterData()
-      .then((x) => setChapters(x))
-      .catch((err) => console.error(err));
-    repo
-      .getActorGroupAndCategory()
-      .then((x) => setTaGroupAndCategory(x))
+      .then((x) => setMmChapters(x))
       .catch((err) => console.error(err));
     repo
       .getNis2Requirements()
       .then((x) => setNis2Requirements(x))
       .catch((err) => console.error(err));
     repo
-      .getNis2ToSepMmTable()
-      .then((x) => setNis2ToSepMmTable(x))
+      .getNis2ToSepTable()
+      .then((x) => setNis2ToSepTable(x))
       .catch((err) => console.error(err));
   }, []);
 
+  //add spinner !!!!!!
   if (
-    !maturityModelData ||
-    !chapters ||
-    !taGroupAndCategory ||
+    !maturityScores ||
+    !mmChapters ||
     !selectedBu ||
-    !selectedPeriod
+    !nis2Requirements ||
+    !nis2ToSepTable
   ) {
-    return "Loading Data";
+    return <Spin fullscreen size="large" />;
   }
   //group by BU
-  const groupedByBu = Map.groupBy(maturityModelData, (item) => {
+  const maturityScoresByBu = Map.groupBy(maturityScores, (item) => {
     return item.bu.name;
   });
 
-  const groupedByBuNis2 = Map.groupBy(nis2ToSepMmTable!, (item) => {
+  const nis2ToSepByBu = Map.groupBy(nis2ToSepTable!, (item) => {
     return item.bu.name;
   });
 
-  console.log(groupedByBuNis2);
+  console.log(nis2ToSepByBu);
 
   //filtering data by Period
-  let filteredData = groupedByBu.get(selectedBu) ?? [];
+  let filteredMaturityScores = maturityScoresByBu.get(selectedBu) ?? [];
 
-  console.log(filteredData);
+  console.log(filteredMaturityScores);
 
-  let filteredDataNis2 = groupedByBuNis2.get(selectedBu) ?? [];
-  console.log(filteredDataNis2);
+  let filteredNis2ToSep = nis2ToSepByBu.get(selectedBu) ?? [];
+  console.log(filteredNis2ToSep);
 
   //get max year in data in filteredData
-  const years = filteredData.map((x) => x.esa_date.getFullYear());
-  const maxYear = Math.max(...years);
+  const maturityScoresYears = filteredMaturityScores.map((x) =>
+    x.esa_date.getFullYear()
+  );
+  const latestMaturityScoresYear = Math.max(...maturityScoresYears);
 
   // filter by max year
-  filteredData = filteredData.filter(
-    (x) => x.esa_date.getFullYear() === maxYear
+  filteredMaturityScores = filteredMaturityScores.filter(
+    (x) => x.esa_date.getFullYear() === latestMaturityScoresYear
   );
 
-  filteredDataNis2 = filteredDataNis2.filter(
-    (x) => x.sep.esa_date.getFullYear() === maxYear
+  filteredNis2ToSep = filteredNis2ToSep.filter(
+    (x) => x.sep.esa_date.getFullYear() === latestMaturityScoresYear
   );
-  console.log(filteredDataNis2);
-
-  // console.log(filteredByPeriod);
-  const filteredByPeriod = FilteredDataByPeriodYear(
-    filteredData,
-    selectedPeriod
-  );
-
-  let actorCategoryData = taGroupAndCategory;
-
-  if (!actorCategoryData) {
-    return [];
-  }
-
-  //showing ta actor  values
-  if (selectedCategories.length !== 0) {
-    actorCategoryData = actorCategoryData.filter((x) =>
-      selectedCategories.includes(x.taCategory.esa_name)
-    );
-  }
-
-  if (selectedActors.length !== 0) {
-    actorCategoryData = actorCategoryData.filter((x) => {
-      return selectedActors.some((y) => y === x.taGroup.esa_name);
-    });
-  }
-
-  let finalData = filteredByPeriod;
-  if (selectedCategories.length > 0 || selectedActors.length > 0) {
-    finalData = filteredByPeriod.filter((x) => {
-      const matchedData = actorCategoryData.some(
-        (y) => y.esa_controlid == x.maturitymodel.esa_controlid
-      );
-
-      return matchedData;
-    });
-  }
-
-  const groupedByChapters = FinalDataGroupedByChapters(finalData);
+  console.log(filteredNis2ToSep);
 
   //change bu with year by default
   function handleBuChange(value: string): void {
     setSelectedBu(value);
-    setSelectedPeriod(getLatestYear(value, groupedByBu));
-  }
-  function getLatestYear(
-    buName: string,
-    dataGroupedByBU: Map<string, SepModel[]>
-  ): number {
-    const allYearsForBu = dataGroupedByBU
-      .get(buName)!
-      .map((x) => x.esa_date.getFullYear());
-    return Math.max(...allYearsForBu);
   }
 
   //SEP esa sepID!!!!
@@ -188,16 +123,15 @@ function App() {
 
   let modal = null;
   if (selectedSepModel) {
-    if (finalData) {
-      modal = (
-        <ModalData
-          repository={repo}
-          onClose={() => setSelectedSepModel(undefined)}
-          sepModel={selectedSepModel}
-        />
-      );
-    }
+    modal = (
+      <ModalData
+        repository={repo}
+        onClose={() => setSelectedSepModel(undefined)}
+        sepModel={selectedSepModel}
+      />
+    );
   }
+
   const getSelectText = () => {
     return (
       <div>
@@ -206,7 +140,7 @@ function App() {
     );
   };
 
-  console.log(filteredDataNis2);
+  console.log(filteredNis2ToSep);
 
   //minimise app.tsx use with functions!
   return (
@@ -214,7 +148,7 @@ function App() {
       <Header title="NIS2" description="description">
         <div />
         <FilterBar
-          buOptions={getUniqueBus(maturityModelData)}
+          buOptions={getUniqueBus(maturityScores)}
           onBuChange={handleBuChange}
           selectedBu={selectedBu}
         />
@@ -222,8 +156,7 @@ function App() {
           <div>Maturity Model</div>
           <Switch
             className="main-switch"
-            checked={switchControls === 1}
-
+            checked={selectedView === "Nis2"}
             onChange={onViewToggle}
           />
           <div>NIS2</div>
@@ -232,7 +165,7 @@ function App() {
           <Button onClick={() => setSwitchControls(2)}>
             Maturity Model view
           </Button> */}
-          <Button type="text" onClick={() => setSwitchControls(1)}>
+          <Button type="text" onClick={() => setSelectedView("Nis2")}>
             <svg
               style={{ width: "20px", fill: "white" }}
               xmlns="http://www.w3.org/2000/svg"
@@ -244,16 +177,16 @@ function App() {
         </div>
       </Header>
       <div style={{ width: "95%", margin: "0 auto", height: "100vh" }}>
-        {switchControls === 1 && (
+        {selectedView === "Nis2" && (
           <Nis2ViewMatrix
-            nis2model={nis2Requirements}
-            nis2ToSepMmTable={filteredDataNis2}
+            nis2Requirements={nis2Requirements}
+            nis2ToSepMmTable={filteredNis2ToSep}
           />
         )}
-        {switchControls === 2 && (
+        {selectedView === "MM" && (
           <ControlMatrix
-            chapters={chapters}
-            modelWithControls={groupedByChapters}
+            chapters={mmChapters}
+            modelWithControls={filteredMaturityScores}
             onMaturityClick={setSelectedSepModel}
           />
         )}

@@ -99,7 +99,7 @@ export default class XrmRepository implements IRepository {
   constructor(xrm: Xrm.XrmStatic) {
     this.webApi = xrm.WebApi;
   }
-  async getNis2ToSepMmTable(): Promise<Nis2ToMmSepAndBu[]> {
+  async getNis2ToSepTable(): Promise<Nis2ToMmSepAndBu[]> {
     const fetchXml: string = `
       <fetch>
         <entity name='esa_nis2toiso'>

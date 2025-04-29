@@ -3,10 +3,11 @@ import { SepModel, ChapterData } from "./Data";
 import "./ControlMatrix.css";
 import ControlItem from "./ControlItem";
 import MainHeaderInMatrix from "../MainHeaderInMatrix";
+import { FinalDataGroupedByChapters } from "../../../utils";
 
 interface ControlMatrixProps {
   chapters: ChapterData[];
-  modelWithControls: Map<string, SepModel[]>;
+  modelWithControls: SepModel[];
   onMaturityClick: (value: SepModel) => void;
 }
 export default function ControlMatrix({
@@ -29,6 +30,7 @@ export default function ControlMatrix({
   }, []);
   // console.log(uniqueChapters);
   // console.log(modelWithControls);
+  const groupedMmByChapters = FinalDataGroupedByChapters(modelWithControls);
 
   return (
     <>
@@ -39,7 +41,7 @@ export default function ControlMatrix({
           const chapterKey = chapter.esaUpdatedChapters;
           // console.log(chapterKey);
 
-          const controlItems = modelWithControls.get(chapterKey) ?? [];
+          const controlItems = groupedMmByChapters.get(chapterKey) ?? [];
           const isSpecialChapter = index === 14 || index === 15;
 
           // console.log(controlItems);

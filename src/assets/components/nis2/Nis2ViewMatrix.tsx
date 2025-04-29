@@ -1,85 +1,80 @@
 import ArticlesView from "./ArticlesView";
 import MainHeaderInMatrix from "../MainHeaderInMatrix";
-import { Nis2Requirements, Nis2ToMmSepAndBu } from "../maturity-model/Data";
+import {
+  Nis2Requirements as Nis2Requirement,
+  Nis2ToMmSepAndBu,
+} from "../maturity-model/Data";
 import { useState } from "react";
 import "./Nis2ViewMatrix.css";
-import SelectPage from "./SelectPage";
+import ArticleButton from "./ArticleButtons";
 
 type Nis2ViewMatrixProps = {
-  nis2model: Nis2Requirements[] | undefined;
-  nis2ToSepMmTable: Nis2ToMmSepAndBu[] | undefined;
+  nis2Requirements: Nis2Requirement[];
+  nis2ToSepMmTable: Nis2ToMmSepAndBu[];
 };
 export default function Nis2ViewMatrix({
-  nis2model,
+  nis2Requirements,
   nis2ToSepMmTable,
 }: Nis2ViewMatrixProps) {
-  const [activeArticle, setActiveArticle] = useState<string | null>(null);
+  const [activeArticleNumber, setActiveArticleNumber] = useState<number | null>(
+    null
+  );
 
   // continue working with key and table which related to the articles.
-  const groupedArticles: Record<string, Nis2Requirements[]> = nis2model?.reduce(
-    (acc: any, article) => {
-      const key: any = article.esa_articlename;
-      if (!acc[key]) {
-        acc[key] = [];
-      }
-      acc[key].push(article);
-      return acc;
-    },
-    {}
+  const groupedByArticleNumber = Map.groupBy(
+    nis2Requirements,
+    (x) => x.esa_articlenumber
   );
-  console.log(groupedArticles);
+  console.log(groupedByArticleNumber);
+  const activeNis2Guids = activeArticleNumber
+    ? nis2Requirements
+        .filter((x) => x.esa_requirementid.startsWith(activeArticleNumber + ""))
+        .map((y) => y.esa_nis2requirementid)
+    : [];
+  const activeNis2Seps = nis2ToSepMmTable.filter((x) =>
+    activeNis2Guids.includes(x._esa_nis2requirement_value)
+  );
 
-  const groupedId: Record<string, Nis2ToMmSepAndBu[]> =
-    nis2ToSepMmTable?.reduce((acc: any, article) => {
-      const key: any = article._esa_nis2requirement_value;
-      if (!acc[key]) {
-        acc[key] = [];
-      }
-      acc[key].push(article);
-      return acc;
-    }, {});
-  console.log(groupedId);
+  Map.groupBy(nis2ToSepMmTable, (x) => x._esa_nis2requirement_value);
 
-  const handleActiveArticle = (article: string) => {
-    setActiveArticle((item) => (item === article ? null : article));
+  console.log(nis2Requirements);
+
+  const handleActiveArticle = (article: number) => {
+    setActiveArticleNumber((item) => (item === article ? null : article));
   };
   return (
     <>
       <MainHeaderInMatrix title="NIS2 Directive Chapter IV: CyberSecurity Risk-Management Measures And Reporting Obligations" />
       <div className="nis2-matrix-container">
-        {groupedArticles &&
-          Object.keys(groupedArticles).map((article) => {
-            const articles = groupedArticles[article];
+        <div className="buttons">
+        {groupedByArticleNumber &&
+          Array.from(groupedByArticleNumber.keys()).map((articleNumber) => {
+            const articles = groupedByArticleNumber.get(articleNumber);
             console.log(articles);
 
-            const requirementIds = Array.from(
-              new Set(articles.map((x) => x.esa_nis2requirementid))
-            );
-            console.log(requirementIds);
 
-            const mmEntries = Object.entries(groupedId).filter(([mmId]) =>
-              requirementIds.includes(mmId)
-            );
-            console.log(mmEntries);
-
-            const sortedByInstances = mmEntries.sort((a, b) => {
-              const [, aOccurences] = a;
-              const [, bOccurences] = b;
-              return bOccurences.length - aOccurences.length;
-            });
-            console.log(articles[0].esa_nis2requirementid);
             return (
-              <div key={article}>
-                <ArticlesView
-                  id={articles[0].esa_nis2requirementid}
-                  nis2ToSepMmTable={sortedByInstances}
-                  isActive={activeArticle === article}
-                  articles={groupedArticles[article]}
-                  onClick={() => handleActiveArticle(article)}
+              <>
+              <ArticleButton
+                  articleName={articles![0].esa_articlename}
+                  articleNumber={articleNumber}
+                  onClick={handleActiveArticle}
                 />
-              </div>
+</>
             );
           })}
+          </div>
+
+        {activeArticleNumber && (
+          <div className="article-view">
+            <ArticlesView
+              allNis2Requirements={nis2Requirements}
+              selectedArticleNumber={activeArticleNumber}
+              nis2ToSepMmTable={activeNis2Seps}
+              requirementGuids={activeNis2Guids}
+            />
+          </div>
+        )}
       </div>
     </>
   );

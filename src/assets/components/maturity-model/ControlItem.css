@@ -17,6 +17,7 @@
 .subtechniques-list {
   white-space: nowrap;
   height: 100%;
+  width: 100%;
 }
 .subtechniques-list-wrapper {
   position: relative;
@@ -26,7 +27,6 @@
   border: 1px solid var(--main-blue-color);
   border-radius: 5px;
   text-align: left;
-  margin-right: px;
 }
 .subtechniques-list-box {
   /* position: relative; */

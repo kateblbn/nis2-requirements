@@ -16,27 +16,27 @@ export const TechniqueItem = ({
 }: TechniqueItemProps) => {
   const colors =
     count <= 2
-      ? "subtechniques-event yellow"
+      ? "subtechniques-event-nist yellow"
       : count > 2 && count <= 14
-      ? "subtechniques-event orange"
+      ? "subtechniques-event-nist orange"
       : count >= 15
-      ? "subtechniques-event red"
-      : "subtechniques-event";
+      ? "subtechniques-event-nist red"
+      : "subtechniques-event-nist";
 
   return (
     <>
-      <div className="tecnique-wrapper" onClick={(e) => onClick(id)}>
+      <div className="tecnique-wrapper-nist" onClick={(e) => onClick(id)}>
         <Tooltip
           title={
             <div className="tooltip-fs ">
-              <div className="subtechniques-name">{name}</div>
+              <div className="subtechniques-name-nist">{name}</div>
             </div>
           }
           mouseEnterDelay={0.5}
         >
-          <div className="subtechniques-name">{name}</div>
+          <div className="subtechniques-name-nist">{name}</div>
         </Tooltip>
-          <div className="subtechniques-id">{id}</div>
+          <div className="subtechniques-id-nist">{id}</div>
 
         <span className={colors}>{count}</span>
       </div>

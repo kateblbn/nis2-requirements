@@ -31,5 +31,5 @@ export interface IRepository {
   getNis2Requirements(): Promise<Nis2Requirements[]>;
 }
 export interface IRepository {
-  getNis2ToSepMmTable(): Promise<Nis2ToMmSepAndBu[]>;
+  getNis2ToSepTable(): Promise<Nis2ToMmSepAndBu[]>;
 }

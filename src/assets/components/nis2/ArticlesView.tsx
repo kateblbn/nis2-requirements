@@ -7,153 +7,131 @@ import {} from "./Nis2MappingMm.css";
 import SelectPage from "./SelectPage";
 
 type ArticlesViewProps = {
-  articles: Nis2Requirements[];
-  onClick: () => void;
-  isActive: boolean;
-  id: string;
-  nis2ToSepMmTable: [string, Nis2ToMmSepAndBu[]][];
+  requirementGuids: string[];
+  selectedArticleNumber: number;
+  nis2ToSepMmTable: Nis2ToMmSepAndBu[];
+  allNis2Requirements: Nis2Requirements[];
 };
 
 export default function ArticlesView({
-  articles,
-  onClick,
-  isActive,
-  id,
+  requirementGuids,
+  selectedArticleNumber,
   nis2ToSepMmTable,
+  allNis2Requirements,
 }: ArticlesViewProps) {
-  const relatedTechniques = nis2ToSepMmTable
-    ?.filter(
-      (item) => item[1].map((x) => x._esa_nis2requirement_value === id) // _esa_nis2requirement_value === id
-    )
-    .flatMap((x) => x[1]);
-  console.log(articles);
+  console.log(allNis2Requirements);
 
-  console.log(relatedTechniques);
-  console.log(id);
-
-  const reducedRelatedTechniques = relatedTechniques.reduce<Nis2ToMmSepAndBu[]>(
-    (acc, current) => {
-      const requirementValue = current.sep.esa_mmcontrol;
-
-      // If the requirement value is not in the accumulator, add it
-      if (!acc.some((item) => item.sep.esa_mmcontrol === requirementValue)) {
-        acc.push(current);
-      }
-
-      return acc;
-    },
-    []
+  const groupedByRequirement = Map.groupBy(
+    nis2ToSepMmTable,
+    (x) => x._esa_nis2requirement_value
   );
+  console.log(groupedByRequirement);
 
-  console.log(reducedRelatedTechniques);
+  // const sortedByInstances = mmEntries.sort((a, b) => {
+  //   const [, aOccurences] = a;
+  //   const [, bOccurences] = b;
+  //   return bOccurences.length - aOccurences.length;
+  // });
 
   const handleTechniqueItemClick = (mmId: string) => {
     console.log("Technique Item Clicked:", mmId);
   };
 
-  return (
-    <>
-      <div className="article-container">
-        <button
-          className="main-button"
-          onClick={onClick}
-          key={articles[0].esa_nis2requirementid}
-        >
-          <div className="wrapper">
-            <div className="box">
-              Article{" "}
-              <span className="number">{articles[0].esa_articlenumber}</span> :
-            </div>
-            <div className="name">{articles[0].esa_articlename}</div>
-          </div>
-        </button>
-        {/* <Nis2MappingMm nis2ToSepMmTable={nis2ToSepMmTable} />; */}
-        <div className="description-wrapper">
-          {isActive && (
+  if (requirementGuids.length < 2) {
+    const maturityScores = groupedByRequirement.get(requirementGuids[0]);
+
+    const requirement = allNis2Requirements.find(
+      (x) => x.esa_nis2requirementid === requirementGuids[0]
+    )!.esa_name;
+    console.log(maturityScores);
+    
+    return (
+      <>
+        <div className="article-container">
+          <div className="description-wrapper">
             <p className="description">
-              {articles.length < 2 ? (
-                <>
-                  <div key={id} className="subarticles">
-                    {articles[0]?.esa_name}{" "}
-                  </div>
-                  <div className="technique-items-wrapper">
-                    {reducedRelatedTechniques?.length == 0 ? (
-                      <SelectPage />
-                    ) : (
-                      reducedRelatedTechniques?.map((technique, index) => {
-                        console.log(technique._esa_nis2requirement_value);
+              <>
+                <div className="subarticles">{requirement} </div>
+          <Nis2MappingMm  />
+                <div className="technique-items-wrapper">
+                  {maturityScores == undefined ? (
+                    <SelectPage />
+                  ) : (
+                    maturityScores?.map((technique, index) => {
+                      console.log(technique._esa_nis2requirement_value);
 
-                        return (
-                          <TechniqueItem
-                            key={technique._esa_nis2requirement_value}
-                            id={technique.mm.esa_controlid}
-                            name={technique.mm?.esa_controlname}
-                            count={technique.sep?.esa_score}
-                            onClick={() =>
-                              handleTechniqueItemClick(
-                                technique._esa_nis2requirement_value
-                              )
-                            }
-                          />
-                        );
-                      })
-                    )}
-                  </div>
-                </>
-              ) : (
-                //ARTICLE 21
-                <div className="subarticle21-wrapper">
-                  {articles.map((article, index) => {
-                    const slicedLiteral = article.esa_requirementid.slice(5);
-
-                    const articleId = article.esa_nis2requirementid;
-                    console.log(article.esa_nis2requirementid);
-
-                    return (
-                      <div className="subarticles-columns">
-                        <Tooltip
-                          key={articleId}
-                          title={<div className="item">{article.esa_name}</div>}
-                        >
-                          <div className="subarticle21" key={articleId}>
-                            <div className="slicedLiteral">{slicedLiteral}</div>
-                            <div className="item">
-                              {article.esa_name}
-                            </div>
-                          </div>
-                        </Tooltip>
-                        <div className="technique-items-wrapper-forsubarticle21">
-                          {reducedRelatedTechniques
-                            ?.filter(
-                              (x) => x._esa_nis2requirement_value === article.esa_nis2requirementid
+                      return (
+                        <TechniqueItem
+                          key={technique._esa_nis2requirement_value}
+                          id={technique.mm.esa_controlid}
+                          name={technique.mm?.esa_controlname}
+                          count={technique.sep?.esa_score}
+                          onClick={() =>
+                            handleTechniqueItemClick(
+                              technique._esa_nis2requirement_value
                             )
-                            .map((technique) => {
-                              console.log(technique._esa_nis2requirement_value);
+                          }
+                        />
+                      );
+                    })
+                  ) 
 
-                              return (
-                                <TechniqueItem
-                                  key={technique._esa_nis2requirement_value}
-                                  id={technique.mm.esa_controlid}
-                                  name={technique.mm?.esa_controlname}
-                                  count={technique.sep?.esa_score}
-                                  onClick={() =>
-                                    handleTechniqueItemClick(
-                                      technique._esa_nis2requirement_value
-                                    )
-                                  }
-                                />
-                              );
-                            })}
-                        </div>
-                      </div>
-                    );
-                  })}
+                  }
                 </div>
-              )}
+              </>
             </p>
-          )}
+          </div>
+        </div>
+      </>
+    );
+  } else {
+    return (
+      //ARTICLE 21
+      <div className="subarticle21-wrapper">
+        <Nis2MappingMm  />
+        <div className="subarticle-21-columns-wrapper">
+        {requirementGuids.map((requirementGuid, index) => {
+          const seps = groupedByRequirement.get(requirementGuid);
+
+          const requirement = allNis2Requirements.find(
+            (x) => x.esa_nis2requirementid === requirementGuid
+          )!.esa_name;
+          const requirementLiteral = allNis2Requirements.find(
+            (x) => x.esa_nis2requirementid === requirementGuid
+          )!.esa_requirementid.slice(5);
+          
+          return (
+            <div className="subarticles-columns">
+              <Tooltip title={<div className="item">{requirement}</div>}>
+                <div className="subarticle21">
+                  <div className="slicedLiteral">{requirementLiteral}</div>
+                  <div className="item">{requirement}</div>
+                </div>
+              </Tooltip>
+              <div className="technique-items-wrapper-forsubarticle21">
+                {seps!.map((technique) => {
+                  console.log(technique._esa_nis2requirement_value);
+
+                  return (
+                    <TechniqueItem
+                      key={technique._esa_nis2requirement_value}
+                      id={technique.mm.esa_controlid}
+                      name={technique.mm?.esa_controlname}
+                      count={technique.sep?.esa_score}
+                      onClick={() =>
+                        handleTechniqueItemClick(
+                          technique._esa_nis2requirement_value
+                        )
+                      }
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
         </div>
       </div>
-    </>
-  );
+    );
+  }
 }

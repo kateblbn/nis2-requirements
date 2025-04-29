@@ -13,11 +13,14 @@ import {
 import { IRepository } from "./repository-interface";
 
 export class TestRepository implements IRepository {
-  async getNis2ToSepMmTable(): Promise<Nis2ToMmSepAndBu[]> {
-    return nis2ToMmSepAndBu.map((x) => mapNestedKeys(x, ["esa_date"])) as Nis2ToMmSepAndBu[];
+  async getNis2ToSepTable(): Promise<Nis2ToMmSepAndBu[]> {
+    return nis2ToMmSepAndBu.map((x) =>
+      mapNestedKeys(x, ["esa_date"])
+    ) as Nis2ToMmSepAndBu[];
   }
   async getNis2Requirements(): Promise<Nis2Requirements[]> {
-    return nis2Requirements.map((x) => mapNestedKeys(x));
+    return new Promise ((resolve) => setTimeout(() => resolve(nis2Requirements.map((x) => mapNestedKeys(x))), 0))
+    
   }
 
   async getMitreTechniques(
@@ -5963,125 +5966,138 @@ const nis2ToMmSepAndBu = [
 
 const nis2Requirements = [
   {
-    "@odata.etag": "W/\"15583920\"",
-    "esa_requirementid": "20",
-    "esa_articlename": "Governance",
-    "esa_articlenumber": 20,
-    "esa_name": "Management bodies of essential and important entities are required to approve the cybersecurity measures taken by those entities in compliance order to Article 21, oversee its implementation and can be held liable for infringment of that Article. It also requires essential and important entities to follow training, and gain sufficient knowlege and skills to enable them to identify risks and assess cybersecurity risk management practices",
-    "esa_nis2requirementid": "f053f5d8-c3f8-ee11-a1fe-0022489ba102"
+    "@odata.etag": 'W/"15583920"',
+    esa_requirementid: "20",
+    esa_articlename: "Governance",
+    esa_articlenumber: 20,
+    esa_name:
+      "Management bodies of essential and important entities are required to approve the cybersecurity measures taken by those entities in compliance order to Article 21, oversee its implementation and can be held liable for infringment of that Article. It also requires essential and important entities to follow training, and gain sufficient knowlege and skills to enable them to identify risks and assess cybersecurity risk management practices",
+    esa_nis2requirementid: "f053f5d8-c3f8-ee11-a1fe-0022489ba102",
   },
   {
-    "@odata.etag": "W/\"15583921\"",
-    "esa_requirementid": "21.2.a",
-    "esa_articlename": "Cybersecurity risk-management measures",
-    "esa_articlenumber": 21,
-    "esa_name": "Policies on risk analysis and information system security;",
-    "esa_nis2requirementid": "f253f5d8-c3f8-ee11-a1fe-0022489ba102"
+    "@odata.etag": 'W/"15583921"',
+    esa_requirementid: "21.2.a",
+    esa_articlename: "Cybersecurity risk-management measures",
+    esa_articlenumber: 21,
+    esa_name: "Policies on risk analysis and information system security;",
+    esa_nis2requirementid: "f253f5d8-c3f8-ee11-a1fe-0022489ba102",
   },
   {
-    "@odata.etag": "W/\"15583922\"",
-    "esa_requirementid": "21.2.b",
-    "esa_articlename": "Cybersecurity risk-management measures",
-    "esa_articlenumber": 21,
-    "esa_name": "Incident handling",
-    "esa_nis2requirementid": "f453f5d8-c3f8-ee11-a1fe-0022489ba102"
+    "@odata.etag": 'W/"15583922"',
+    esa_requirementid: "21.2.b",
+    esa_articlename: "Cybersecurity risk-management measures",
+    esa_articlenumber: 21,
+    esa_name: "Incident handling",
+    esa_nis2requirementid: "f453f5d8-c3f8-ee11-a1fe-0022489ba102",
   },
   {
-    "@odata.etag": "W/\"15583923\"",
-    "esa_requirementid": "21.2.c",
-    "esa_articlename": "Cybersecurity risk-management measures",
-    "esa_articlenumber": 21,
-    "esa_name": "Business continuity, such as backup management and disaster recovery, and crisis management",
-    "esa_nis2requirementid": "f653f5d8-c3f8-ee11-a1fe-0022489ba102"
+    "@odata.etag": 'W/"15583923"',
+    esa_requirementid: "21.2.c",
+    esa_articlename: "Cybersecurity risk-management measures",
+    esa_articlenumber: 21,
+    esa_name:
+      "Business continuity, such as backup management and disaster recovery, and crisis management",
+    esa_nis2requirementid: "f653f5d8-c3f8-ee11-a1fe-0022489ba102",
   },
   {
-    "@odata.etag": "W/\"15583924\"",
-    "esa_requirementid": "21.2.d",
-    "esa_articlename": "Cybersecurity risk-management measures",
-    "esa_articlenumber": 21,
-    "esa_name": "Supply chain security, including security-related aspects concerning the relationships between each entity and its direct suppliers or service providers",
-    "esa_nis2requirementid": "f853f5d8-c3f8-ee11-a1fe-0022489ba102"
+    "@odata.etag": 'W/"15583924"',
+    esa_requirementid: "21.2.d",
+    esa_articlename: "Cybersecurity risk-management measures",
+    esa_articlenumber: 21,
+    esa_name:
+      "Supply chain security, including security-related aspects concerning the relationships between each entity and its direct suppliers or service providers",
+    esa_nis2requirementid: "f853f5d8-c3f8-ee11-a1fe-0022489ba102",
   },
   {
-    "@odata.etag": "W/\"15583925\"",
-    "esa_requirementid": "21.2.e",
-    "esa_articlename": "Cybersecurity risk-management measures",
-    "esa_articlenumber": 21,
-    "esa_name": "Security in network and information systems acquisition, development and maintenance, including vulnerability handling and disclosure",
-    "esa_nis2requirementid": "fa53f5d8-c3f8-ee11-a1fe-0022489ba102"
+    "@odata.etag": 'W/"15583925"',
+    esa_requirementid: "21.2.e",
+    esa_articlename: "Cybersecurity risk-management measures",
+    esa_articlenumber: 21,
+    esa_name:
+      "Security in network and information systems acquisition, development and maintenance, including vulnerability handling and disclosure",
+    esa_nis2requirementid: "fa53f5d8-c3f8-ee11-a1fe-0022489ba102",
   },
   {
-    "@odata.etag": "W/\"15583926\"",
-    "esa_requirementid": "21.2.f",
-    "esa_articlename": "Cybersecurity risk-management measures",
-    "esa_articlenumber": 21,
-    "esa_name": "Policies and procedures to assess the effectiveness of cybersecurity risk-management measures",
-    "esa_nis2requirementid": "fc53f5d8-c3f8-ee11-a1fe-0022489ba102"
+    "@odata.etag": 'W/"15583926"',
+    esa_requirementid: "21.2.f",
+    esa_articlename: "Cybersecurity risk-management measures",
+    esa_articlenumber: 21,
+    esa_name:
+      "Policies and procedures to assess the effectiveness of cybersecurity risk-management measures",
+    esa_nis2requirementid: "fc53f5d8-c3f8-ee11-a1fe-0022489ba102",
   },
   {
-    "@odata.etag": "W/\"15583927\"",
-    "esa_requirementid": "21.2.g",
-    "esa_articlename": "Cybersecurity risk-management measures",
-    "esa_articlenumber": 21,
-    "esa_name": "Basic cyber hygiene practices and cybersecurity training",
-    "esa_nis2requirementid": "fe53f5d8-c3f8-ee11-a1fe-0022489ba102"
+    "@odata.etag": 'W/"15583927"',
+    esa_requirementid: "21.2.g",
+    esa_articlename: "Cybersecurity risk-management measures",
+    esa_articlenumber: 21,
+    esa_name: "Basic cyber hygiene practices and cybersecurity training",
+    esa_nis2requirementid: "fe53f5d8-c3f8-ee11-a1fe-0022489ba102",
   },
   {
-    "@odata.etag": "W/\"15583928\"",
-    "esa_requirementid": "21.2.h",
-    "esa_articlename": "Cybersecurity risk-management measures",
-    "esa_articlenumber": 21,
-    "esa_name": "Policies and procedures regarding the use of cryptography and, where appropriate, encryption",
-    "esa_nis2requirementid": "0054f5d8-c3f8-ee11-a1fe-0022489ba102"
+    "@odata.etag": 'W/"15583928"',
+    esa_requirementid: "21.2.h",
+    esa_articlename: "Cybersecurity risk-management measures",
+    esa_articlenumber: 21,
+    esa_name:
+      "Policies and procedures regarding the use of cryptography and, where appropriate, encryption",
+    esa_nis2requirementid: "0054f5d8-c3f8-ee11-a1fe-0022489ba102",
   },
   {
-    "@odata.etag": "W/\"15583929\"",
-    "esa_requirementid": "21.2.i",
-    "esa_articlename": "Cybersecurity risk-management measures",
-    "esa_articlenumber": 21,
-    "esa_name": "Human resources security, access control policies and asset management",
-    "esa_nis2requirementid": "0254f5d8-c3f8-ee11-a1fe-0022489ba102"
+    "@odata.etag": 'W/"15583929"',
+    esa_requirementid: "21.2.i",
+    esa_articlename: "Cybersecurity risk-management measures",
+    esa_articlenumber: 21,
+    esa_name:
+      "Human resources security, access control policies and asset management",
+    esa_nis2requirementid: "0254f5d8-c3f8-ee11-a1fe-0022489ba102",
   },
   {
-    "@odata.etag": "W/\"15583930\"",
-    "esa_requirementid": "21.2.j",
-    "esa_articlename": "Cybersecurity risk-management measures",
-    "esa_articlenumber": 21,
-    "esa_name": "The use of multi-factor authentication or continuous authentication solutions, secured voice, video and text",
-    "esa_nis2requirementid": "0454f5d8-c3f8-ee11-a1fe-0022489ba102"
+    "@odata.etag": 'W/"15583930"',
+    esa_requirementid: "21.2.j",
+    esa_articlename: "Cybersecurity risk-management measures",
+    esa_articlenumber: 21,
+    esa_name:
+      "The use of multi-factor authentication or continuous authentication solutions, secured voice, video and text",
+    esa_nis2requirementid: "0454f5d8-c3f8-ee11-a1fe-0022489ba102",
   },
   {
-    "@odata.etag": "W/\"15583931\"",
-    "esa_requirementid": "22",
-    "esa_articlename": "Union level coordinated security risk assessments of critical supply chains",
-    "esa_articlenumber": 22,
-    "esa_name": "The Cooperation Group, in cooperation with the Commission and ENISA, may carry out coordinated security risk assessments of specific critical ICT services, ICT systems or ICT products supply chains.",
-    "esa_nis2requirementid": "0654f5d8-c3f8-ee11-a1fe-0022489ba102"
+    "@odata.etag": 'W/"15583931"',
+    esa_requirementid: "22",
+    esa_articlename:
+      "Union level coordinated security risk assessments of critical supply chains",
+    esa_articlenumber: 22,
+    esa_name:
+      "The Cooperation Group, in cooperation with the Commission and ENISA, may carry out coordinated security risk assessments of specific critical ICT services, ICT systems or ICT products supply chains.",
+    esa_nis2requirementid: "0654f5d8-c3f8-ee11-a1fe-0022489ba102",
   },
   {
-    "@odata.etag": "W/\"15583932\"",
-    "esa_requirementid": "23",
-    "esa_articlename": "Reporting obligations",
-    "esa_articlenumber": 23,
-    "esa_name": "Entities concerned shall notify, without undue delay, the recipients of their services of significant incidents that are likely to adversely affect the provision of those services.",
-    "esa_nis2requirementid": "0854f5d8-c3f8-ee11-a1fe-0022489ba102"
+    "@odata.etag": 'W/"15583932"',
+    esa_requirementid: "23",
+    esa_articlename: "Reporting obligations",
+    esa_articlenumber: 23,
+    esa_name:
+      "Entities concerned shall notify, without undue delay, the recipients of their services of significant incidents that are likely to adversely affect the provision of those services.",
+    esa_nis2requirementid: "0854f5d8-c3f8-ee11-a1fe-0022489ba102",
   },
   {
-    "@odata.etag": "W/\"15583933\"",
-    "esa_requirementid": "24",
-    "esa_articlename": "Use of European cybersecurity certification schemes",
-    "esa_articlenumber": 24,
-    "esa_name": "Member States may require essential and important entities to use particular ICT products, ICT services and ICT processes, developed by the essential or important entity or procured from third parties, that are certified under European cybersecurity certification schemes adopted pursuant to Article 49 of Regulation (EU) 2019/881. Furthermore, Member States shall encourage essential and important entities to use qualified trust services.\n\nIt also states the role of the Commission and its empowerment to adopt delegated acts and to carry out impact assessments and consultations",
-    "esa_nis2requirementid": "0a54f5d8-c3f8-ee11-a1fe-0022489ba102"
+    "@odata.etag": 'W/"15583933"',
+    esa_requirementid: "24",
+    esa_articlename: "Use of European cybersecurity certification schemes",
+    esa_articlenumber: 24,
+    esa_name:
+      "Member States may require essential and important entities to use particular ICT products, ICT services and ICT processes, developed by the essential or important entity or procured from third parties, that are certified under European cybersecurity certification schemes adopted pursuant to Article 49 of Regulation (EU) 2019/881. Furthermore, Member States shall encourage essential and important entities to use qualified trust services.\n\nIt also states the role of the Commission and its empowerment to adopt delegated acts and to carry out impact assessments and consultations",
+    esa_nis2requirementid: "0a54f5d8-c3f8-ee11-a1fe-0022489ba102",
   },
   {
-    "@odata.etag": "W/\"15583934\"",
-    "esa_requirementid": "25",
-    "esa_articlename": "Standardisation",
-    "esa_articlenumber": 25,
-    "esa_name": "Member States shall, without imposing or discriminating in favour of the use of a particular type of technology, encourage the use of European and international standards and technical specifications relevant to the security of network and information systems.\n\nENISA, in cooperation with Member States, and, where appropriate, after consulting relevant stakeholders, shall draw up advice and guidelines regarding the technical areas to be considered",
-    "esa_nis2requirementid": "0c54f5d8-c3f8-ee11-a1fe-0022489ba102"
-  }
+    "@odata.etag": 'W/"15583934"',
+    esa_requirementid: "25",
+    esa_articlename: "Standardisation",
+    esa_articlenumber: 25,
+    esa_name:
+      "Member States shall, without imposing or discriminating in favour of the use of a particular type of technology, encourage the use of European and international standards and technical specifications relevant to the security of network and information systems.\n\nENISA, in cooperation with Member States, and, where appropriate, after consulting relevant stakeholders, shall draw up advice and guidelines regarding the technical areas to be considered",
+    esa_nis2requirementid: "0c54f5d8-c3f8-ee11-a1fe-0022489ba102",
+  },
 ];
 
 const MitreTechniques = [

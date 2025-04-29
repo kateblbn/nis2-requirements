@@ -1,27 +1,27 @@
-.tecnique-wrapper {
+.tecnique-wrapper-nist {
   display: flex;
-  width: 90%;
+  position: relative;
+  width: 99%;
+  height: 3.5rem;
   font-size: 0.8rem;
-  align-items: center;
+  align-items: flex-start;
   background-color: rgb(223, 223, 223);
   border-radius: 5px;
-  margin: 4px;
-  padding: 4px;
+  margin: 10px 0;
+  padding: 10px;
   flex-direction: column;
 }
-.tecnique-wrapper:nth-child(odd) {
+.tecnique-wrapper-nist:nth-child(odd) {
   background-color: #f1f1f1;
 }
-.tecnique-wrapper:hover {
+.tecnique-wrapper-nist:hover {
   background-color: #c7dcf9;
   transition: 0.7s;
   cursor: pointer;
-  position: static;
-  height: 5rem;
 }
-.subtechniques-name {
+.subtechniques-name-nist {
   width: 100%;
-  text-align: center;
+  text-align: justify;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -29,16 +29,20 @@
 }
 
 
-.subtechniques-id {
+.subtechniques-id-nist {
   overflow: hidden;
-  text-overflow: ellipsis;
-  margin: 0 auto;
-  left: 0;
+  position: absolute;
+  left: 10px;
+  bottom: 12px;
+  font-weight: 500;
 }
 
-.subtechniques-event {
+.subtechniques-event-nist {
   color: white;
-  justify-content: end;
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  width: 30px;
 }
 
 .yellow {
@@ -60,3 +64,4 @@
   background-color: #f5f8fc !important;
   color: black !important;
 }
+
