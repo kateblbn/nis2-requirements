@@ -107,10 +107,16 @@ function App() {
   filteredMaturityScores = filteredMaturityScores.filter(
     (x) => x.esa_date.getFullYear() === latestMaturityScoresYear
   );
+  console.log(filteredMaturityScores);
 
-  filteredNis2ToSep = filteredNis2ToSep.filter(
-    (x) => x.sep.esa_date.getFullYear() === latestMaturityScoresYear
-  );
+  filteredNis2ToSep = filteredNis2ToSep.filter(x => {
+    // if it’s already a Date, great; if it’s a string, wrap it in new Date(...)
+    const d = x.sep.esa_date instanceof Date
+      ? x.sep.esa_date
+      : new Date(x.sep.esa_date as any);
+  
+    return d.getFullYear() === latestMaturityScoresYear;
+  });
   console.log(filteredNis2ToSep);
 
   //change bu with year by default
