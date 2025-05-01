@@ -39,20 +39,20 @@ export default function ModalNis2Table({
             key: "esa_requirementid",
             dataIndex: "esa_requirementid",
             title: "ID",
-            width: 90,
+            width: 120,
           },
           {
             key: "esa_articlename",
             dataIndex: "esa_articlename",
-            width: 120,
+            width: 300,
             title: "Article",
           },
-          {
-            key: "esa_name",
-            title: "Description",
-            dataIndex: "esa_name",
-            width: 300,
-          },
+          // {
+          //   key: "esa_name",
+          //   title: "Description",
+          //   dataIndex: "esa_name",
+          //   width: 300,
+          // },
         ]}
         dataSource={uniqueRelevantRequirements?.map((x) => ({
           ...x,

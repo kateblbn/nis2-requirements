@@ -61,6 +61,8 @@ export default function ArticlesView({
                     <SelectPage />
                   ) : (
                     maturityScores?.map((technique, index) => {
+                      console.log(technique);
+                      
                       console.log(technique._esa_nis2requirement_value);
 
                       return (
@@ -86,6 +88,8 @@ export default function ArticlesView({
         <Nis2MappingMm />
         <div className="subarticle-21-columns-wrapper">
           {requirementGuids.map((requirementGuid, index) => {
+            console.log(requirementGuid);
+            
             const seps = groupedByRequirement.get(requirementGuid)!;
             const uniqueSeps = Array.from(
               new Map(seps.map((sep) => [sep.mm.esa_controlid, sep])).values()
@@ -98,7 +102,7 @@ export default function ArticlesView({
               .esa_requirementid.slice(5);
 
             return (
-              <div className="subarticles-columns">
+              <div key={requirementGuid} className="subarticles-columns">
                 <Tooltip title={<div className="item">{requirement}</div>}>
                   <div className="subarticle21">
                     <div className="slicedLiteral">{requirementLiteral}</div>

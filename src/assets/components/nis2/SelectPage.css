@@ -12,3 +12,6 @@
     grid-row-end: 5;
     margin-top: 2rem;
 }
+.selecting {
+    width: 100% !important;
+}

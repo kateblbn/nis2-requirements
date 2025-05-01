@@ -25,6 +25,9 @@ function App() {
   const [selectedNis2SepModels, setSelectedNis2SepModels] = useState<
     Nis2ToSepModel[]
   >([]);
+  const [activeArticleNumber, setActiveArticleNumber] = useState<number | null>(
+    null
+  );
 
   const onViewToggle = (checked: boolean) => {
     setSelectedView(checked ? "Nis2" : "MM");
@@ -117,14 +120,6 @@ function App() {
     );
   }
 
-  const getSelectText = () => {
-    return (
-      <div>
-        Select an article to expand the list of Telenor Maturity model constrols
-      </div>
-    );
-  };
-
   console.log(filteredNis2ToSep);
 
   //minimise app.tsx use with functions!
@@ -146,11 +141,9 @@ function App() {
           />
           <div>NIS2</div>
 
-          {/* <Button onClick={() => setSwitchControls(1)}>NIS2 view</Button>
-          <Button onClick={() => setSwitchControls(2)}>
-            Maturity Model view
-          </Button> */}
-          <Button type="text" onClick={() => setSelectedView("Nis2")}>
+          <Button type="text" onClick={() =>  {
+            setSelectedView("Nis2");
+            setActiveArticleNumber(null)}}>
             <svg
               style={{ width: "20px", fill: "white" }}
               xmlns="http://www.w3.org/2000/svg"
@@ -164,6 +157,8 @@ function App() {
       <div style={{ width: "95%", margin: "0 auto", height: "100vh" }}>
         {selectedView === "Nis2" && (
           <Nis2ViewMatrix
+            activeArticleNumber={activeArticleNumber}
+            setActiveArticleNumber={setActiveArticleNumber}
             nis2Requirements={nis2Requirements}
             nis2ToSepMmTable={filteredNis2ToSep}
             onMaturityClick={setSelectedNis2SepModels}

@@ -114,7 +114,7 @@ export default function ModalData({
       )}
       <ModalIsoData isoControls={isoControls} />
       <ModalNistData nistControls={nistControls} />
-      <ModalMitreTechniquesData mitreTechniques={mitreTechniques} />
+      {/* <ModalMitreTechniquesData mitreTechniques={mitreTechniques} /> */}
     </Modal>
   );
 }
