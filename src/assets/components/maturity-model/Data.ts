@@ -1,6 +1,4 @@
-export type Nis2ToMmSepAndBu = {
-  "@odata.etag": 'W/"12526594"';
-  esa_nis2toisoid: string;
+export type Nis2ToSepModel = {
   _esa_nis2requirement_value: string;
   bu: {
     name: string;
@@ -18,7 +16,6 @@ export type Nis2ToMmSepAndBu = {
 };
 
 export type Nis2Requirements = {
-  "@odata.etag": string;
   esa_articlename: string;
   esa_articlenumber: number;
   esa_name: string;
@@ -26,43 +23,11 @@ export type Nis2Requirements = {
   esa_nis2requirementid: string;
 };
 
-export type SepModel = {
-  "@odata.etag": string;
-  esa_sepid: string;
-  esa_date: Date;
-  esa_score: number;
-  maturitymodel: {
-    esa_chapter: string;
-    esa_controlid: string;
-    esa_telenormaturitymodelid: string;
-    esa_controlname: string;
-  };
-  bu: {
-    name: string;
-  };
-};
 export type ChapterData = {
-  "@odata.etag": 'W/"12526594"';
   esa_chapter: string;
 };
-export type TaGroupAndCategory = {
-  "@odata.etag": 'W/"12526594"';
-  esa_controlid: string;
-  esa_telenormaturitymodelid: string;
-  esa_chapter: string;
-  taGroup: {
-    esa_name: string;
-    esa_othernames: string;
-    category: {
-      esa_name: string;
-    };
-  };
-  taCategory: {
-    esa_name: string;
-  };
-};
+
 export type IsoStandart = {
-  "@odata.etag": 'W/"12519673"';
   esa_isocontrolid_value: string;
   esa_mmtoisoid: string;
   esa_iso270012022id: string;
@@ -74,7 +39,6 @@ export type IsoControlApiModel = {
 };
 
 export type NistControl = {
-  "@odata.etag": string;
   esa_nist80053id: string;
   esa_controlid: string;
   esa_controlname: string;
@@ -84,7 +48,6 @@ export type NistControlApiModel = {
   nistControls: NistControl;
 };
 export type MitreEnterprise = {
-  "@odata.etag": string;
   esa_mmtoisoid: string;
   esa_mitreid: string;
   esa_name: string;

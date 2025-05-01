@@ -1,21 +1,11 @@
-import { SepModel, TaGroupAndCategory } from "./Data";
-
-export function getUniqueCategories(
-  actorCategoryData: TaGroupAndCategory[]
-): string[] {
-  return actorCategoryData.reduce((acc: string[], category) => {
-    if (!acc.includes(category.taCategory.esa_name))
-      acc.push(category.taCategory.esa_name);
-    return acc;
-  }, []);
-}
-
 // unique period (year)
 
-export function getUniqueYears(maturityData: SepModel[]) {
+import { Nis2ToSepModel as Nis2ToSepModel } from "./Data";
+
+export function getUniqueYears(maturityData: Nis2ToSepModel[]) {
   const uniquePeriod: number[] = maturityData.reduce((acc: number[], x) => {
-    if (!acc.includes(x.esa_date.getFullYear()))
-      acc.push(x.esa_date.getFullYear());
+    if (!acc.includes(x.sep.esa_date.getFullYear()))
+      acc.push(x.sep.esa_date.getFullYear());
     return acc;
   }, []);
   // modified year
@@ -24,8 +14,7 @@ export function getUniqueYears(maturityData: SepModel[]) {
 
 //unique Actors
 
-
-export function getUniqueBus(maturityData: SepModel[]): string[] {
+export function getUniqueBus(maturityData: Nis2ToSepModel[]): string[] {
   return maturityData.reduce((acc: string[], e) => {
     if (!acc.includes(e.bu.name)) acc.push(e.bu.name);
     return acc;

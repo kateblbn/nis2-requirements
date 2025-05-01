@@ -1,29 +1,30 @@
 import React from "react";
 import "./ControlItem.css";
-import { SepModel } from "./Data";
 import { Tooltip } from "antd";
+import { Nis2ToSepModel } from "./Data";
 type controlItemProps = {
-  sepItem: SepModel;
-  onClick: (item: SepModel) => void;
+  sepItems: Nis2ToSepModel[];
+  onClick: (item: Nis2ToSepModel[]) => void;
 };
-export default function ControlItem({ sepItem, onClick }: controlItemProps) {
+export default function ControlItem({ sepItems, onClick }: controlItemProps) {
+  const firstSepItem = sepItems[0];
   const countColors =
-    Math.floor(sepItem.esa_score) == 5
+    Math.floor(firstSepItem.sep.esa_score) == 5
       ? "count black"
-      : Math.floor(sepItem.esa_score) == 4
+      : Math.floor(firstSepItem.sep.esa_score) == 4
       ? "count darkBlue"
-      : Math.floor(sepItem.esa_score) == 3
+      : Math.floor(firstSepItem.sep.esa_score) == 3
       ? "count blue"
-      : Math.floor(sepItem.esa_score) == 2
+      : Math.floor(firstSepItem.sep.esa_score) == 2
       ? "count lightblue"
-      : Math.floor(sepItem.esa_score) == 1
+      : Math.floor(firstSepItem.sep.esa_score) == 1
       ? "count light"
       : "count color";
   // console.log(sepItem);
 
   return (
     <>
-      <div className="tecnique-wrapper" onClick={(e) => onClick(sepItem)}>
+      <div className="tecnique-wrapper" onClick={(e) => onClick(sepItems)}>
         <div className="subtechniques-list">
           <div className="subtechniques-list-wrapper">
             <div className="subtechniques-list-box">
@@ -31,20 +32,20 @@ export default function ControlItem({ sepItem, onClick }: controlItemProps) {
                 title={
                   <div className="tooltip-fs ">
                     <div className="subtechniques-name">
-                      {sepItem.maturitymodel.esa_controlname}
+                      {firstSepItem.mm.esa_controlname}
                     </div>
                   </div>
                 }
                 mouseEnterDelay={0.5}
               >
                 <div className="subtechniques-name">
-                  {sepItem.maturitymodel.esa_controlname}
+                  {firstSepItem.mm.esa_controlname}
                 </div>
               </Tooltip>
               <div className="subtechniques-id">
-                {sepItem.maturitymodel.esa_controlid}
+                {firstSepItem.mm.esa_controlid}
               </div>
-              <span className={countColors}>{sepItem.esa_score}</span>
+              <span className={countColors}>{firstSepItem.sep.esa_score}</span>
             </div>
           </div>
         </div>
