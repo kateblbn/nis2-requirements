@@ -1,13 +1,10 @@
 import {
   ChapterData,
   IsoControlApiModel,
-  IsoStandart,
   MitreEnterpriseApiModel,
   Nis2Requirements,
-  Nis2ToMmSepAndBu,
+  Nis2ToSepModel,
   NistControlApiModel,
-  SepModel,
-  TaGroupAndCategory,
 } from "../components/maturity-model/Data";
 import { IRepository } from "./repository-interface";
 import { mapNestedKeys } from "../components/maturity-model/Data";
@@ -19,7 +16,7 @@ export default class XrmRepository implements IRepository {
   constructor(xrm: Xrm.XrmStatic) {
     this.webApi = xrm.WebApi;
   }
-  async getNis2ToSepTable(): Promise<Nis2ToMmSepAndBu[]> {
+  async getNis2ToSepTable(): Promise<Nis2ToSepModel[]> {
     const fetchXml: string = `
       <fetch>
         <entity name='esa_nis2toiso'>
@@ -155,44 +152,6 @@ export default class XrmRepository implements IRepository {
     return res.entities.map((x) => mapNestedKeys(x));
   }
 
-  async getActorGroupAndCategory(): Promise<TaGroupAndCategory[]> {
-    const fetchXml: string = `
-    <fetch distinct="true">
-      <entity name='esa_telenormaturitymodel'>
-        <attribute name="esa_chapter" />
-        <attribute name="esa_controlid" />
-        <link-entity name='esa_mmtoiso' from='esa_mmcontrolid' to='esa_telenormaturitymodelid' intersect='true' link-type="inner">
-          <link-entity name='esa_iso270012022' from='esa_iso270012022id' to='esa_isocontrolid' intersect='true' link-type="inner">
-            <link-entity name='esa_isotonist' from='esa_isocontrolid' to='esa_iso270012022id' intersect='true' link-type="inner">
-              <link-entity name='esa_nist80053' from='esa_nist80053id' to='esa_nistcontrolid' intersect='true' link-type="inner">
-                <link-entity name='esa_nisttomitre' from='esa_nistcontrolid' to='esa_nist80053id' intersect='true' link-type="inner">
-                  <link-entity name='esa_mitreenterprise' from='esa_mitreenterpriseid' to='esa_mitreid' intersect='true' link-type="inner">
-                    <link-entity name='esa_threatactorttps' from='esa_mitreid' to='esa_mitreenterpriseid' intersect='true' link-type="inner">
-                      <link-entity name='esa_threatactorgroup' from='esa_threatactorgroupid' to='esa_tagroup' alias="taGroup" link-type="inner">
-                        <attribute name="esa_name" />
-                        <attribute name="esa_othernames" /> 
-                        <link-entity name="esa_threatactorcategory" from="esa_threatactorcategoryid" to="esa_threatactorcategory" alias="taCategory">
-                          <attribute name="esa_name" />
-                        </link-entity>
-                      </link-entity>
-                    </link-entity>
-                  </link-entity>
-                </link-entity>
-              </link-entity>
-            </link-entity>
-          </link-entity>
-        </link-entity>
-      </entity>
-    </fetch>
-    `;
-    const res: Xrm.RetrieveMultipleResult =
-      await this.webApi.retrieveMultipleRecords(
-        "esa_telenormaturitymodel",
-        `?fetchXml=${encodeURIComponent(fetchXml)}`
-      );
-    return res.entities.map((x) => mapNestedKeys(x));
-  }
-
   async getChapterData(): Promise<ChapterData[]> {
     const fetchXml: string = `
 <fetch>
@@ -207,31 +166,5 @@ export default class XrmRepository implements IRepository {
         `?fetchXml=${encodeURIComponent(fetchXml)}`
       );
     return res.entities.map((x) => mapNestedKeys(x));
-  }
-
-  async getMaturityModel(): Promise<SepModel[]> {
-    const fetchXml: string = `
-    <fetch>
-      <entity name='esa_sep'>
-        <attribute name="esa_score" />
-        <attribute name="esa_date" />
-        <link-entity name="esa_telenormaturitymodel" from="esa_telenormaturitymodelid" to="esa_mmcontrol" alias="maturitymodel">
-					<attribute name="esa_telenormaturitymodelid" />
-          <attribute name="esa_chapter" />
-          <attribute name="esa_controlid" />
-          <attribute name="esa_controlname" />
-        </link-entity>
-        <link-entity name="businessunit" from="businessunitid" to="owningbusinessunit" alias="bu">
-          <attribute name="name" />
-        </link-entity>
-      </entity>
-    </fetch>
-            `;
-    const res: Xrm.RetrieveMultipleResult =
-      await this.webApi.retrieveMultipleRecords(
-        "esa_sep",
-        `?fetchXml=${encodeURIComponent(fetchXml)}`
-      );
-    return res.entities.map((x) => mapNestedKeys(x, ["esa_date"]));
   }
 }

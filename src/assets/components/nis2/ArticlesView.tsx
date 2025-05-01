@@ -1,16 +1,18 @@
 import { Tooltip } from "antd";
-import { Nis2Requirements, Nis2ToMmSepAndBu } from "../maturity-model/Data";
+import { Nis2Requirements, Nis2ToSepModel } from "../maturity-model/Data";
 import "./ArticlesView.css";
 import TechniqueItem from "./TechniqueItem";
 import Nis2MappingMm from "./Nis2MappingMm";
 import {} from "./Nis2MappingMm.css";
 import SelectPage from "./SelectPage";
+import ControlItem from "../maturity-model/ControlItem";
 
 type ArticlesViewProps = {
   requirementGuids: string[];
   selectedArticleNumber: number;
-  nis2ToSepMmTable: Nis2ToMmSepAndBu[];
+  nis2ToSepMmTable: Nis2ToSepModel[];
   allNis2Requirements: Nis2Requirements[];
+  onMaturityClick: (value: Nis2ToSepModel[]) => void;
 };
 
 export default function ArticlesView({
@@ -18,6 +20,7 @@ export default function ArticlesView({
   selectedArticleNumber,
   nis2ToSepMmTable,
   allNis2Requirements,
+  onMaturityClick,
 }: ArticlesViewProps) {
   console.log(allNis2Requirements);
 
@@ -44,7 +47,7 @@ export default function ArticlesView({
       (x) => x.esa_nis2requirementid === requirementGuids[0]
     )!.esa_name;
     console.log(maturityScores);
-    
+
     return (
       <>
         <div className="article-container">
@@ -52,7 +55,7 @@ export default function ArticlesView({
             <p className="description">
               <>
                 <div className="subarticles">{requirement} </div>
-          <Nis2MappingMm  />
+                <Nis2MappingMm />
                 <div className="technique-items-wrapper">
                   {maturityScores == undefined ? (
                     <SelectPage />
@@ -61,22 +64,14 @@ export default function ArticlesView({
                       console.log(technique._esa_nis2requirement_value);
 
                       return (
-                        <TechniqueItem
+                        <ControlItem
                           key={technique._esa_nis2requirement_value}
-                          id={technique.mm.esa_controlid}
-                          name={technique.mm?.esa_controlname}
-                          count={technique.sep?.esa_score}
-                          onClick={() =>
-                            handleTechniqueItemClick(
-                              technique._esa_nis2requirement_value
-                            )
-                          }
+                          sepItems={[technique]}
+                          onClick={onMaturityClick}
                         />
                       );
                     })
-                  ) 
-
-                  }
+                  )}
                 </div>
               </>
             </p>
@@ -88,48 +83,44 @@ export default function ArticlesView({
     return (
       //ARTICLE 21
       <div className="subarticle21-wrapper">
-        <Nis2MappingMm  />
+        <Nis2MappingMm />
         <div className="subarticle-21-columns-wrapper">
-        {requirementGuids.map((requirementGuid, index) => {
-          const seps = groupedByRequirement.get(requirementGuid);
+          {requirementGuids.map((requirementGuid, index) => {
+            const seps = groupedByRequirement.get(requirementGuid)!;
+            const uniqueSeps = Array.from(
+              new Map(seps.map((sep) => [sep.mm.esa_controlid, sep])).values()
+            );
+            const requirement = allNis2Requirements.find(
+              (x) => x.esa_nis2requirementid === requirementGuid
+            )!.esa_name;
+            const requirementLiteral = allNis2Requirements
+              .find((x) => x.esa_nis2requirementid === requirementGuid)!
+              .esa_requirementid.slice(5);
 
-          const requirement = allNis2Requirements.find(
-            (x) => x.esa_nis2requirementid === requirementGuid
-          )!.esa_name;
-          const requirementLiteral = allNis2Requirements.find(
-            (x) => x.esa_nis2requirementid === requirementGuid
-          )!.esa_requirementid.slice(5);
-          
-          return (
-            <div className="subarticles-columns">
-              <Tooltip title={<div className="item">{requirement}</div>}>
-                <div className="subarticle21">
-                  <div className="slicedLiteral">{requirementLiteral}</div>
-                  <div className="item">{requirement}</div>
+            return (
+              <div className="subarticles-columns">
+                <Tooltip title={<div className="item">{requirement}</div>}>
+                  <div className="subarticle21">
+                    <div className="slicedLiteral">{requirementLiteral}</div>
+                    <div className="item">{requirement}</div>
+                  </div>
+                </Tooltip>
+                <div className="technique-items-wrapper-forsubarticle21">
+                  {uniqueSeps.map((technique) => {
+                    console.log(technique._esa_nis2requirement_value);
+
+                    return (
+                      <ControlItem
+                        key={technique._esa_nis2requirement_value}
+                        sepItems={[technique]}
+                        onClick={onMaturityClick}
+                      />
+                    );
+                  })}
                 </div>
-              </Tooltip>
-              <div className="technique-items-wrapper-forsubarticle21">
-                {seps!.map((technique) => {
-                  console.log(technique._esa_nis2requirement_value);
-
-                  return (
-                    <TechniqueItem
-                      key={technique._esa_nis2requirement_value}
-                      id={technique.mm.esa_controlid}
-                      name={technique.mm?.esa_controlname}
-                      count={technique.sep?.esa_score}
-                      onClick={() =>
-                        handleTechniqueItemClick(
-                          technique._esa_nis2requirement_value
-                        )
-                      }
-                    />
-                  );
-                })}
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
         </div>
       </div>
     );

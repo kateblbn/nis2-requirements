@@ -1,14 +1,14 @@
 import ChapterItem from "./ChapterItem";
-import { SepModel, ChapterData } from "./Data";
 import "./ControlMatrix.css";
 import ControlItem from "./ControlItem";
 import MainHeaderInMatrix from "../MainHeaderInMatrix";
 import { FinalDataGroupedByChapters } from "../../../utils";
+import { ChapterData, Nis2ToSepModel } from "./Data";
 
 interface ControlMatrixProps {
   chapters: ChapterData[];
-  modelWithControls: SepModel[];
-  onMaturityClick: (value: SepModel) => void;
+  modelWithControls: Nis2ToSepModel[];
+  onMaturityClick: (value: Nis2ToSepModel[]) => void;
 }
 export default function ControlMatrix({
   chapters,
@@ -43,7 +43,10 @@ export default function ControlMatrix({
 
           const controlItems = groupedMmByChapters.get(chapterKey) ?? [];
           const isSpecialChapter = index === 14 || index === 15;
-
+          const groupedByControlId = Map.groupBy(
+            controlItems,
+            (item) => item.mm.esa_controlid
+          );
           // console.log(controlItems);
           return (
             <div key={chapter.esaUpdatedChapters} className="chapter-column">
@@ -58,15 +61,18 @@ export default function ControlMatrix({
                 />
               </div>
               <div className="control-item-wrapper">
-                {controlItems.map((item) => {
-                  return (
-                    <ControlItem
-                      key={item.maturitymodel.esa_chapter}
-                      sepItem={item}
-                      onClick={onMaturityClick}
-                    />
-                  );
-                })}
+                {Array.from(groupedByControlId.keys())
+                  .sort()
+                  .map((controlId) => {
+                    const controlItems = groupedByControlId.get(controlId)!;
+                    return (
+                      <ControlItem
+                        key={controlId}
+                        sepItems={controlItems}
+                        onClick={onMaturityClick}
+                      />
+                    );
+                  })}
               </div>
             </div>
           );

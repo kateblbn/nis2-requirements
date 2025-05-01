@@ -1,12 +1,11 @@
 import { Modal, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import {
-  IsoControlApiModel,
   IsoStandart,
   MitreEnterprise,
-  MitreEnterpriseApiModel,
+  Nis2Requirements,
+  Nis2ToSepModel,
   NistControl,
-  SepModel,
 } from "../Data";
 import "./ModalData.css";
 import { IRepository } from "../../../repositories/repository-interface";
@@ -14,16 +13,21 @@ import Termometer from "./Termometer";
 import ModalIsoData from "./ModalIsoData";
 import ModalNistData from "./ModalNistData";
 import ModalMitreTechniquesData from "./ModalMitreTechniquesData";
+import ModalNis2Table from "./ModalNis2Table";
 
 type ModalDataProps = {
   repository: IRepository;
   onClose: () => void;
-  sepModel: SepModel | undefined;
+  nis2SepModels: Nis2ToSepModel[];
+  nis2Requirements: Nis2Requirements[];
+  showNis2Requirements: boolean;
 };
 export default function ModalData({
   repository,
   onClose,
-  sepModel,
+  nis2SepModels,
+  nis2Requirements,
+  showNis2Requirements,
 }: ModalDataProps) {
   const [open, setOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +38,7 @@ export default function ModalData({
   >();
 
   useEffect(() => {
-    if (!sepModel) {
+    if (nis2SepModels.length == 0) {
       console.error("sepModel is undefined, stopping execution.");
       return;
     } else {
@@ -45,7 +49,8 @@ export default function ModalData({
       setOpen(true);
       setIsLoading(true);
 
-      const maturityGuid = sepModel?.maturitymodel.esa_telenormaturitymodelid;
+      const sepModel = nis2SepModels[0];
+      const maturityGuid = sepModel!.sep.esa_mmcontrol;
 
       if (!maturityGuid) {
         console.error("Maturity GUID is missing or undefined");
@@ -66,7 +71,7 @@ export default function ModalData({
 
       setIsLoading(false);
     }
-  }, [sepModel]);
+  }, [nis2SepModels]);
 
   const handleClose = () => {
     setOpen(false);
@@ -74,10 +79,8 @@ export default function ModalData({
   };
   // console.log(mitreTechniques);
 
-  let title =
-    sepModel!.maturitymodel.esa_controlid +
-    " " +
-    sepModel!.maturitymodel.esa_controlname;
+  const sepModel = nis2SepModels[0];
+  let title = sepModel!.mm.esa_controlid + " " + sepModel!.mm.esa_controlname;
 
   // onclick has esa_telenormaturitymodelid
   return (
@@ -102,7 +105,13 @@ export default function ModalData({
         <h2>{title}</h2>
         <hr style={{ width: "90%" }} />
       </div>
-      <Termometer score={sepModel!.esa_score} />
+      <Termometer score={sepModel!.sep.esa_score} />
+      {showNis2Requirements && (
+        <ModalNis2Table
+          nis2Requirements={nis2Requirements}
+          nis2SepModels={nis2SepModels}
+        />
+      )}
       <ModalIsoData isoControls={isoControls} />
       <ModalNistData nistControls={nistControls} />
       <ModalMitreTechniquesData mitreTechniques={mitreTechniques} />
