@@ -46,8 +46,15 @@ export default class XrmRepository implements IRepository {
         `?fetchXml=${encodeURIComponent(fetchXml)}`
       );
 
-    return res.entities.map((x) => mapNestedKeys(x));
-  }
+      return res.entities.map(raw => {
+        // 1) first do the generic nested‐key mapping
+        const mapped = mapNestedKeys<Nis2ToSepModel>(raw);
+  
+        // 2) then *override* the sep.esa_date with a real Date
+        mapped.sep.esa_date = new Date(mapped.sep.esa_date as any);
+  
+        return mapped;
+        } ) }
 
   async getNis2Requirements(): Promise<Nis2Requirements[]> {
     const fetchXml: string = `

@@ -6,7 +6,7 @@ type HeaderProps = {
   title: string;
   //consider making optional
   children?: ReactNode;
-  description?: string;
+  description?: React.ReactNode;
 };
 
 export default function Header(props: HeaderProps) {

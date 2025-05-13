@@ -85,11 +85,11 @@ function App() {
   const maturityScoresYears = filteredNis2ToSep.map((x) =>
     x.sep.esa_date.getFullYear()
   );
+  
   const latestMaturityScoresYear = Math.max(...maturityScoresYears);
 
   // filter by max year
   filteredNis2ToSep = filteredNis2ToSep.filter((x) => {
-    // if it’s already a Date, great; if it’s a string, wrap it in new Date(...)
     const d =
       x.sep.esa_date instanceof Date
         ? x.sep.esa_date
@@ -119,13 +119,30 @@ function App() {
       />
     );
   }
-
-  console.log(filteredNis2ToSep);
-
+  const description = () => {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', padding: '1rem', fontSize: '1rem' }}>
+        <p style={{ width: '100%' }}>
+          The Network and Information Systems 2 (NIS2) Directive expands the first NIS Directive. It is an EU-wide legislation on cybersecurity that provides legal measures to standardise the level of cybersecurity across the EU with a particular emphasis on businesses and organizations that are vital to the operations of the society.
+        </p>
+        <p style={{ width: '100%' }}>
+          The directive has to be transposed by EU member states into national law. It is important to distinguish that the implementation differs between EU member states based on their local legislation.
+        </p>
+        <p style={{ width: '100%' }}>
+          <b>Disclaimer: </b>
+          This dashboard is only for the purpose of a high-level guide towards the directive requirements, however, should not be treated as the definitive requirements as it needs to be verified with your respective local regulations.
+        </p>
+        <p style={{ width: '100%' }}>
+          The dashboard also provides the underlying controls benchmarked based on Telenor Maturity Model, ISO 27001 and NIS 800-53 framework.
+        </p>
+      </div>
+    );
+  };
+    console.log(filteredNis2ToSep);
   //minimise app.tsx use with functions!
   return (
     <>
-      <Header title="NIS2" description="description">
+      <Header title="NIS2 Directive" description={description()}>
         <div />
         <FilterBar
           buOptions={getUniqueBus(nis2ToSepTable)}
@@ -133,13 +150,13 @@ function App() {
           selectedBu={selectedBu}
         />
         <div className="toggle-wrapper">
-          <div>Maturity Model</div>
+          <div>MM view</div>
           <Switch
             className="main-switch"
             checked={selectedView === "Nis2"}
             onChange={onViewToggle}
           />
-          <div>NIS2</div>
+          <div>NIS2 view</div>
 
           <Button type="text" onClick={() =>  {
             setSelectedView("Nis2");
